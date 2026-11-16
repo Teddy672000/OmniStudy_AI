@@ -1,0 +1,53 @@
+/* Phông chữ mặc định và màu nền tổng thể */
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #F8FAFC; 
+    color: #0F172A; 
+}
+
+h1, h2, h3, h4, .font-heading { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+}
+
+/* Hiệu ứng lật thẻ Flashcard 3D */
+.perspective { 
+    perspective: 1000px; 
+}
+
+.transform-style-3d { 
+    transform-style: preserve-3d; 
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.flipped { 
+    transform: rotateY(180deg); 
+}
+
+.backface-hidden { 
+    backface-visibility: hidden; 
+    -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 { 
+    transform: rotateY(180deg); 
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) gọn đẹp cho khung nội dung pháp lý */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}

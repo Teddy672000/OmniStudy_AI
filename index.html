@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniStudy AI — The Heptagon | Học thông minh, dẫn đầu xu hướng</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --ink: #0f172a; 
+            --ac: #4f46e5;
+        }
+        html.dark-mode {
+            --ink: #f8fafc;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        html.dark-mode body { background-color: #0f172a !important; color: #f8fafc !important; }
+        html.dark-mode .bg-white { background-color: #1e293b !important; }
+        html.dark-mode .bg-slate-50 { background-color: #334155 !important; }
+        html.dark-mode .bg-slate-100 { background-color: #334155 !important; color: #f8fafc !important; }
+        html.dark-mode .text-slate-900 { color: #f8fafc !important; }
+        html.dark-mode .text-slate-700 { color: #cbd5e1 !important; }
+        html.dark-mode .text-slate-500 { color: #94a3b8 !important; }
+        html.dark-mode .border-ink { border-color: #f8fafc !important; }
+        html.dark-mode .shadow-pop { box-shadow: 4px 4px 0px 0px #f8fafc !important; }
+        html.dark-mode .shadow-pop-lg { box-shadow: 8px 8px 0px 0px #f8fafc !important; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--ink);
+            transition: background-color 0.3s ease;
+            margin: 0;
+        }
+        .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .border-ink { border-color: var(--ink); }
+        .bg-ink { background-color: var(--ink); color: #f8fafc; }
+        .text-ink { color: var(--ink); }
+        .shadow-pop { box-shadow: 4px 4px 0px 0px var(--ink); }
+        .shadow-pop-lg { box-shadow: 8px 8px 0px 0px var(--ink); }
+        .pop-press { transition: all 0.1s; cursor: pointer; }
+        .pop-press:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px 0px var(--ink) !important; }
+
+        .hero-cosmos-bg {
+            background:
+                radial-gradient(circle at 82% 48%, rgba(251, 191, 36, 0.22) 0%, rgba(99, 102, 241, 0.12) 38%, transparent 68%),
+                radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.14) 0%, transparent 45%),
+                linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, #eef2ff 100%);
+        }
+        html.dark-mode .hero-cosmos-bg {
+            background:
+                radial-gradient(circle at 82% 48%, rgba(251, 191, 36, 0.2) 0%, rgba(99, 102, 241, 0.18) 40%, transparent 70%),
+                linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        }
+        
+        .perspective { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .flipped { transform: rotateY(180deg); }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .grecaptcha-badge, #recaptcha-container { display: none !important; visibility: hidden !important; }
+
+        .astra-section {
+            background-color: #06070d;
+            background-image:
+                radial-gradient(circle at 50% 14%, rgba(245, 158, 11, 0.16) 0%, rgba(79, 70, 229, 0.12) 32%, transparent 65%),
+                radial-gradient(circle at 50% 52%, rgba(56, 189, 248, 0.1) 0%, transparent 55%),
+                radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 32px 32px;
+            color: #ffffff;
+        }
+        .astra-card {
+            background: linear-gradient(180deg, #161826 0%, #0e101a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 20px 42px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+        .astra-icon-box {
+            background:
+                radial-gradient(circle at 50% 25%, rgba(251, 191, 36, 0.2), rgba(30, 41, 59, 0.92)),
+                linear-gradient(180deg, #1e2235 0%, #11131f 100%);
+            border: 1.5px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+            transition: transform 0.2s ease-out, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .astra-icon-box.active-glow {
+            border-color: #fbbf24;
+            box-shadow: 0 0 28px rgba(251, 191, 36, 0.45), inset 0 0 15px rgba(251, 191, 36, 0.22);
+        }
+        .beam-line { stroke-dasharray: 450; stroke-dashoffset: 450; }
+
+        /* --- THEME TOGGLE BUTTON --- */
+        .theme-toggle-btn {
+            width: 38px; height: 38px; border: 2px solid var(--ink); border-radius: 12px;
+            background: var(--bg-white, #fff); color: var(--ink); display: grid; place-items: center; 
+            cursor: pointer; transition: transform 0.2s cubic-bezier(0.3, 1.4, 0.5, 1);
+            flex-shrink: 0; box-shadow: 2px 2px 0px 0px var(--ink);
+        }
+        html.dark-mode .theme-toggle-btn {
+            background: #1e293b; color: #f8fafc; border-color: #f8fafc; box-shadow: 2px 2px 0px 0px #f8fafc;
+        }
+        .theme-toggle-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px 0px var(--ink) !important; }
+        html.dark-mode .theme-toggle-btn:active { box-shadow: 0px 0px 0px 0px #f8fafc !important; }
+        
+        .theme-toggle-btn svg { width: 18px; height: 18px; transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
+        html.dark-mode .theme-toggle-btn svg { transform: rotate(-90deg); }
+
+        /* --- WAVE LETTERS --- */
+        .wave-text-container { display: flex; flex-wrap: wrap; gap: 0.15em; cursor: default; touch-action: none; width: 100%; }
+        .wave-word { display: flex; white-space: nowrap; }
+        .wave-letter {
+            position: relative; display: inline-block; line-height: 1.15;
+            transform: translateY(var(--y, 0px)) scaleY(var(--sy, 1)); transform-origin: 50% 100%; will-change: transform;
+        }
+        .wave-letter::after {
+            content: ""; position: absolute; left: 10%; right: 10%; bottom: -8px; height: 4px; border-radius: 50%;
+            background: rgba(40,30,80,0.15); opacity: calc(0.5 - var(--t, 0) * 0.35);
+            transform: translateY(calc(var(--y, 0px) * -1)) scaleX(calc(1 - var(--t, 0) * 0.5)); filter: blur(2px); pointer-events: none;
+        }
+        html.dark-mode .wave-letter::after { background: rgba(0,0,0,0.4); }
+        .highlight-word { color: #4f46e5; position: relative; }
+        .highlight-word svg { position: absolute; bottom: -6px; left: 0; width: 100%; color: #4f46e5; pointer-events: none; }
+
+        /* --- MAGNIFY DOCK --- */
+        #dockMenuContainer { position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 1.5rem; }
+        .u208-dk {
+            display: flex; align-items: flex-end; gap: 8px; padding: 8px 12px; border-radius: 24px;
+            background: rgba(255,255,255,0.85); box-shadow: inset 0 0 0 1px rgba(255,255,255,1), 0 10px 30px -12px rgba(60,40,90,.45);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); height: 64px; border: 2px solid var(--ink);
+        }
+        html.dark-mode .u208-dk { background: rgba(30,41,59,0.85); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.3); }
+        .u208-a { position: relative; flex: none; width: var(--s, 40px); height: var(--s, 40px); margin-bottom: var(--lift, 0px); padding: 0; border: 0; border-radius: 12px; background: none; cursor: pointer; }
+        .u208-a.active-tab::after {
+            content: ""; position: absolute; left: 50%; bottom: -10px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%;
+            background: var(--ink); transition: opacity .2s;
+        }
+        html.dark-mode .u208-a.active-tab::after { background: #fff; }
+        .u208-a svg { width: 100%; height: 100%; display: block; border-radius: 12px; box-shadow: 0 4px 10px -4px rgba(0,0,0,.35); }
+        .u208-a.is-hop { animation: u208-hop .9s cubic-bezier(.3,.6,.4,1) 2; }
+        @keyframes u208-hop { 30% { transform: translateY(-16px) } 55% { transform: translateY(0) } 72% { transform: translateY(-4px) } }
+        .u208-tip {
+            position: absolute; left: 0; top: -36px; padding: 4px 10px; border-radius: 8px; background: rgba(40,32,60,.9);
+            color: #fff; font-size: 12.5px; font-weight: 700; white-space: nowrap; pointer-events: none; opacity: 0;
+            transform: translate(-50%, 0); transition: opacity .15s, left 0.1s; z-index: 10;
+        }
+        html.dark-mode .u208-tip { background: #fff; color: var(--ink); }
+        .u208-tip.is-on { opacity: 1; }
+
+        /* --- HIỆU ỨNG GHIM CỐ ĐỊNH & XẾP CHỒNG THẺ (SCROLL-LOCK DECK) --- */
+        #stackingScrollTrack {
+            position: relative;
+            height: 320vh;
+        }
+        #stackingStickyPin {
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 1.5rem;
+            overflow: hidden;
+        }
+        #deckStageViewport {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            margin-top: 1rem;
+        }
+        .deck-card-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            will-change: transform, opacity, filter;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .deck-card-item.top-active-card {
+            border-color: rgba(251, 191, 36, 0.65);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.9), 0 0 25px rgba(251, 191, 36, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col">
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-40 border-b-2 border-ink bg-white/95 backdrop-blur">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3">
+            <div class="flex items-center gap-3">
+                <button id="themeToggleBtn" type="button" class="theme-toggle-btn" onclick="window.toggleThemeMode()" title="Đổi giao diện Sáng/Tối">
+                    <svg id="themeIcon" viewBox="0 0 16 16" aria-hidden="true">
+                        <circle cx="8" cy="8" r="3" fill="currentColor"></circle>
+                        <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M8 1.5v1.4M8 13.1v1.4M1.5 8h1.4M13.1 8h1.4M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"></path>
+                        </g>
+                    </svg>
+                </button>
+                
+                <div class="grid h-10 w-10 place-items-center rounded-xl border-2 border-ink bg-indigo-600 font-display text-xl font-extrabold text-white shadow-pop">O</div>
+                <div>
+                    <span class="font-display text-xl font-extrabold block leading-none">OmniStudy<span class="text-indigo-600">.ai</span></span>
+                    <span class="text-[11px] font-bold text-slate-500 hidden sm:block">The Heptagon • THPT Giồng Ông Tố</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2.5 flex-wrap justify-end">
+                <select id="modelSelect" class="border-2 border-ink rounded-lg px-2 py-1.5 text-xs sm:text-sm font-bold shadow-pop pop-press outline-none bg-white text-slate-900">
+                    <option value="gemini-1.5-flash">Tốc độ (Gemini 1.5 Flash)</option>
+                    <option value="gemini-2.5-flash">Thông minh (Gemini 2.5 Flash)</option>
+                </select>
+
+                <button onclick="document.getElementById('gamificationSection').scrollIntoView({behavior:'smooth'})" class="hidden items-center gap-2 rounded-full border-2 border-ink bg-white px-3.5 py-1.5 sm:flex shadow-pop pop-press" title="Xem Streak & Tiến độ">
+                    <span id="headerFireIcon" class="text-base">🔥</span>
+                    <span class="text-xs sm:text-sm font-bold"><span id="progressCount">0</span> / <span id="goalTarget">10</span></span>
+                </button>
+                
+                <button onclick="window.openProfileModal()" class="rounded-full border-2 border-ink bg-indigo-100 px-3 py-1.5 text-xs sm:text-sm font-bold text-indigo-950 pop-press shadow-pop flex items-center gap-1.5" title="Chỉnh sửa Hồ sơ & Ảnh đại diện">
+                    <img id="headerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Heptagon" class="w-5 h-5 rounded-full border border-ink object-cover bg-white">
+                    <span id="headerUserName" class="hidden sm:inline">Hồ sơ</span>
+                </button>
+
+                <button id="authBtn" onclick="window.openAuthModal()" class="rounded-full border-2 border-ink bg-amber-400 px-4 py-1.5 text-xs sm:text-sm font-bold text-amber-950 pop-press shadow-pop flex items-center justify-center">
+                    Đăng nhập Cloud
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="mx-auto max-w-7xl px-5 pt-8 pb-6 w-full">
+        <div class="relative overflow-hidden rounded-3xl border-2 border-ink hero-cosmos-bg shadow-pop-lg">
+            <div class="grid items-center gap-6 p-8 md:grid-cols-[1.3fr_1fr] md:p-10">
+                <div>
+                    <span class="inline-block rounded-full border-2 border-ink bg-amber-400 px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-amber-950">✨ The Heptagon — Học nhanh gấp 3 lần</span>
+                    
+                    <h1 id="heroTitle" class="mt-4 text-3xl font-extrabold md:text-5xl font-display wave-text-container">
+                        <!-- JS Wave Text -->
+                    </h1>
+                    
+                    <p class="mt-4 max-w-lg text-base text-slate-600 font-medium leading-relaxed">Dán bài học vào hoặc bấm <strong>"⚡ Nạp bài mẫu chạy ngay"</strong> để hệ thống tạo Sơ đồ tư duy, Thẻ ghi nhớ 3D, Bài trắc nghiệm và thắp lửa <strong>Streak</strong> hôm nay.</p>
+                    <div class="mt-5 flex flex-wrap gap-2.5 text-xs sm:text-sm font-bold">
+                        <span class="rounded-full border-2 border-ink bg-white px-3.5 py-1 shadow-sm">🧠 Sơ đồ tư duy</span>
+                        <span class="rounded-full border-2 border-ink bg-white px-3.5 py-1 shadow-sm">🗂️ Thẻ ghi nhớ 3D</span>
+                        <span class="rounded-full border-2 border-ink bg-white px-3.5 py-1 shadow-sm">✍️ Trắc nghiệm</span>
+                        <span class="rounded-full border-2 border-ink bg-amber-200 text-amber-950 px-3.5 py-1 shadow-sm">🔥 Chuỗi Streak tự động</span>
+                    </div>
+                </div>
+                <div class="relative mx-auto hidden md:flex items-center justify-center w-64 h-64">
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-300/40 via-indigo-400/25 to-emerald-300/30 blur-2xl animate-pulse"></div>
+                    <div class="relative z-10 rounded-3xl border-2 border-ink bg-white/80 backdrop-blur-sm p-4 shadow-pop">
+                        <img src="mascot.webp" onerror="this.onerror=null; this.src='pngtree-cute-chibi-baby-water-buffalo-sitting-with-rice-stalks-and-stars-png-image_19850430.webp';" alt="Linh vật Trâu Chibi" class="w-48 h-48 object-contain drop-shadow-md hover:scale-105 transition-transform duration-500" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKSPACE HỌC TẬP CHÍNH -->
+    <main id="workspaceSection" class="mx-auto grid max-w-7xl gap-6 px-5 pb-14 lg:grid-cols-12 w-full">
+        <!-- Cột Trái -->
+        <section class="lg:col-span-5">
+            <div class="rounded-3xl border-2 border-ink bg-white p-6 shadow-pop h-full flex flex-col z-10 relative">
+                <div class="mb-4 flex items-center justify-between gap-2">
+                    <h2 class="text-xl font-extrabold font-display">1. Tài liệu của bạn</h2>
+                    <button onclick="window.loadSampleText()" class="rounded-xl border-2 border-ink bg-emerald-400 px-3 py-1.5 text-xs font-extrabold pop-press shadow-pop text-slate-900">⚡ Nạp bài mẫu chạy ngay</button>
+                </div>
+                
+                <div class="mb-4 grid grid-cols-2 gap-3">
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Môn học
+                        <select id="subjectSelect" class="mt-1.5 w-full rounded-xl border-2 border-ink bg-slate-50 p-2.5 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Lịch Sử">Lịch Sử</option>
+                            <option value="Sinh Học">Sinh Học</option>
+                            <option value="Hóa Học / Vật Lý">Hóa Học / Vật Lý</option>
+                            <option value="Địa Lý / GDKT&PL">Địa Lý / GDKT&PL</option>
+                        </select>
+                    </label>
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Mục tiêu (câu/ngày)
+                        <input type="number" id="goalInput" value="10" min="1" max="50" onchange="window.updateGoal()" class="mt-1.5 w-full rounded-xl border-2 border-ink bg-slate-50 p-2.5 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </label>
+                </div>
+                
+                <label class="relative mb-4 flex cursor-pointer items-center gap-4 rounded-2xl border-2 border-dashed border-ink/40 bg-slate-50 p-4 transition hover:border-indigo-600 hover:bg-indigo-50 group">
+                    <input type="file" id="fileInput" accept=".txt,.md" onchange="window.handleFileUpload(event)" class="absolute inset-0 cursor-pointer opacity-0" />
+                    <span class="grid h-11 w-11 place-items-center rounded-xl border-2 border-ink bg-white text-xl shadow-pop group-hover:scale-110 transition-transform">📄</span>
+                    <span>
+                        <span class="block text-sm font-bold text-slate-900" id="fileNameDisplay">Tải lên tệp .txt (Tự động lên lửa Streak 🔥)</span>
+                        <span class="text-xs text-slate-500 font-medium">Hoặc dán trực tiếp nội dung vào ô bên dưới</span>
+                    </span>
+                </label>
+                
+                <textarea id="docInput" rows="7" placeholder="Dán nội dung bài học, danh sách từ vựng tiếng Anh hoặc đề cương ôn tập vào đây..." class="w-full flex-1 resize-none rounded-2xl border-2 border-ink bg-slate-50 p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900"></textarea>
+                
+                <button id="analyzeBtn" onclick="window.analyzeDocument()" class="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-indigo-600 py-4 text-base font-extrabold text-white shadow-pop pop-press disabled:opacity-70">
+                    <span>✨</span> Phân tích bằng AI
+                </button>
+                <div id="statusMsg" class="text-xs text-center font-bold text-indigo-600 mt-3 hidden animate-pulse">⏳ Hệ thống đang phân tích dữ liệu...</div>
+            </div>
+        </section>
+
+        <!-- Cột Phải -->
+        <section class="lg:col-span-7 flex flex-col relative z-0">
+            <!-- DOCK MENU -->
+            <div id="dockMenuContainer">
+                <div class="u208-dk" role="toolbar" aria-label="Menu chức năng"></div>
+                <div class="u208-tip" aria-hidden="true"></div>
+            </div>
+
+            <div class="min-h-[520px] flex-1 rounded-3xl border-2 border-ink bg-white p-6 shadow-pop md:p-8 flex flex-col relative">
+                <div id="view-empty" class="flex flex-1 flex-col items-center justify-center text-center">
+                    <div class="mb-4 grid h-20 w-20 place-items-center rounded-3xl border-2 border-ink bg-amber-400 text-4xl shadow-pop">📚</div>
+                    <h3 class="text-2xl font-extrabold font-display">Sẵn sàng học chưa?</h3>
+                    <p class="mt-2 max-w-sm text-slate-500 font-medium">Bấm nút <strong>"⚡ Nạp bài mẫu chạy ngay"</strong> ở cột bên trái để trải nghiệm lập tức và kích hoạt Streak hôm nay.</p>
+                </div>
+
+                <div id="view-mindmap" class="hidden w-full h-full">
+                    <h3 class="mb-6 text-2xl font-extrabold font-display">Cấu trúc kiến thức</h3>
+                    <div id="mindmapContainer" class="grid gap-4 sm:grid-cols-2"></div>
+                </div>
+
+                <div id="view-flashcard" class="hidden flex-1 w-full h-full flex flex-col items-center justify-center">
+                    <div class="mx-auto flex max-w-md w-full flex-col items-center gap-6">
+                        <div class="flex w-full items-center justify-between">
+                            <h3 class="text-2xl font-extrabold font-display">Thẻ ghi nhớ 3D</h3>
+                            <span id="cardCounter" class="rounded-full border-2 border-ink bg-amber-400 px-3 py-0.5 text-sm font-bold text-amber-950">0 / 0</span>
+                        </div>
+                        <div onclick="window.flipCard()" class="h-72 w-full cursor-pointer perspective">
+                            <div id="flashcardBox" class="relative h-full w-full transform-style-3d">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border-2 border-ink bg-white p-8 text-center shadow-pop-lg backface-hidden">
+                                    <span id="fcPos" class="mb-3 rounded-full bg-emerald-200 px-3 py-1 text-[11px] font-bold uppercase tracking-widest border-2 border-ink text-slate-900">Từ loại</span>
+                                    <h4 id="fcFront" class="text-3xl sm:text-4xl font-extrabold text-slate-900">Mặt trước</h4>
+                                    <p id="fcPronun" class="mt-2 font-mono text-sm font-bold text-slate-400"></p>
+                                    <button onclick="window.speakWord(event)" class="mt-5 grid h-11 w-11 place-items-center rounded-full border-2 border-ink bg-amber-400 pop-press shadow-pop text-xl" title="Nghe phát âm">🔊</button>
+                                    <span class="absolute bottom-3 text-[11px] font-semibold text-slate-400">Chạm vào thẻ để lật mặt sau</span>
+                                </div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center rounded-3xl border-2 border-ink bg-slate-900 p-8 text-center text-white shadow-pop-lg backface-hidden rotate-y-180">
+                                    <h4 id="fcBack" class="text-2xl font-bold text-amber-400">Mặt sau</h4>
+                                    <p id="fcExample" class="mt-4 text-sm italic font-medium opacity-90"></p>
+                                    <p id="fcSynAnt" class="mt-4 rounded-xl bg-white/10 px-4 py-2 text-xs font-bold"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex w-full items-center justify-between">
+                            <button onclick="window.prevCard()" class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-white text-xl font-bold shadow-pop pop-press text-slate-900">←</button>
+                            <button onclick="window.saveCurrentCard()" class="rounded-2xl border-2 border-ink bg-indigo-600 px-6 py-3 font-bold text-white shadow-pop pop-press">🔖 Lưu thẻ này</button>
+                            <button onclick="window.nextCard()" class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-white text-xl font-bold shadow-pop pop-press text-slate-900">→</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-quiz" class="hidden w-full h-full">
+                    <h3 class="mb-6 text-2xl font-extrabold font-display">Luyện tập trắc nghiệm</h3>
+                    <div id="quizContainer" class="space-y-5"></div>
+                </div>
+
+                <div id="view-saved" class="hidden w-full h-full">
+                    <h3 class="mb-6 text-2xl font-extrabold font-display">Sổ tay của tôi</h3>
+                    <div id="savedList" class="grid gap-3 sm:grid-cols-2"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- KHU VỰC TƯƠNG TÁC ASTRA AI & GAMIFICATION -->
+    <div class="astra-section border-t-2 border-ink py-16 px-5 relative">
+        
+        <section id="orbitalTriggerSection" class="max-w-6xl mx-auto pt-6 pb-24 relative">
+            <div class="max-w-lg mx-auto mb-14 rounded-3xl border border-amber-400/40 bg-gradient-to-b from-slate-900/95 via-indigo-950/80 to-black/95 p-7 text-center shadow-[0_0_60px_rgba(251,191,36,0.18)]">
+                <span class="inline-block px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/40 text-xs font-extrabold uppercase tracking-wider text-amber-300">⚡ Đồng bộ đa nguồn học liệu</span>
+                <h2 class="mt-3 text-2xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-snug">Đưa mình mọi thứ bạn đang học.</h2>
+                <p class="mt-2.5 text-sm text-slate-300 font-medium">Lăn chuột xuống để tia năng lượng dẫn biểu tượng cuốn vào vòng tròn AI</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10">
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">📄</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Ghi chú bài giảng<br><span class="text-amber-300 font-semibold">&amp; Tệp PDF</span>
+                    </span>
+                </div>
+
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer lg:mt-6" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">📱</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Ảnh chụp ghi chú<br><span class="text-sky-300 font-semibold">của bạn</span>
+                    </span>
+                </div>
+
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer lg:mt-12" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">📅</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Lịch trình &amp;<br><span class="text-emerald-300 font-semibold">Ngày thi của bạn</span>
+                    </span>
+                </div>
+
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer lg:mt-12" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">🎯</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Điểm mục tiêu<br><span class="text-rose-300 font-semibold">của bạn</span>
+                    </span>
+                </div>
+
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer lg:mt-6" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">📚</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Slide bài giảng &amp;<br><span class="text-purple-300 font-semibold">Sách giáo khoa</span>
+                    </span>
+                </div>
+
+                <div class="orbital-item flex flex-col items-center text-center group cursor-pointer" onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})">
+                    <div class="astra-icon-box w-24 h-24 rounded-3xl flex items-center justify-center text-4xl mb-5">🔗</div>
+                    <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs sm:text-[13px] font-bold tracking-wide text-slate-100 leading-relaxed shadow">
+                        Liên kết web &amp;<br><span class="text-indigo-300 font-semibold">Bài viết</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="relative h-60 sm:h-64 w-full mt-2 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 1000 260" fill="none" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+                            <stop offset="55%" stop-color="#fbbf24" stop-opacity="1" />
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M80 10 C80 150, 380 180, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                    <path d="M250 30 C250 150, 420 190, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                    <path d="M415 50 C415 160, 465 200, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                    <path d="M585 50 C585 160, 535 200, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                    <path d="M750 30 C750 150, 580 190, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                    <path d="M920 10 C920 150, 620 180, 500 245" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+
+                    <path class="beam-line" d="M80 10 C80 150, 380 180, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                    <path class="beam-line" d="M250 30 C250 150, 420 190, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                    <path class="beam-line" d="M415 50 C415 160, 465 200, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                    <path class="beam-line" d="M585 50 C585 160, 535 200, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                    <path class="beam-line" d="M750 30 C750 150, 580 190, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                    <path class="beam-line" d="M920 10 C920 150, 620 180, 500 245" stroke="url(#beamGrad)" stroke-width="3" />
+                </svg>
+
+                <div id="coreFloatingEmblem" class="absolute left-1/2 top-4 -translate-x-1/2 z-30 w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-yellow-600 p-0.5 shadow-[0_0_45px_rgba(251,191,36,0.85)] flex items-center justify-center will-change-transform">
+                    <div class="w-full h-full bg-gradient-to-b from-[#1a1829] to-[#090a10] rounded-[14px] flex items-center justify-center text-3xl">✨</div>
+                </div>
+            </div>
+
+            <div id="orbitalWheelAssembly" class="relative flex justify-center items-center -mt-8 will-change-transform">
+                <div id="orbitalGlowAura" class="absolute w-64 h-64 rounded-full bg-gradient-to-tr from-amber-500/25 via-indigo-500/25 to-sky-400/25 blur-3xl"></div>
+                <svg id="orbitalRingSvg" class="w-56 h-56 sm:w-64 sm:h-64" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,0.1)" stroke-width="14" stroke-dasharray="2.5 5.8" fill="none" />
+                    <circle id="orbitalProgressRing" cx="100" cy="100" r="80" stroke="#fbbf24" stroke-width="14" stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)" fill="none" style="filter: drop-shadow(0 0 8px rgba(251,191,36,0.8));" />
+                    <circle cx="100" cy="100" r="60" stroke="rgba(251,191,36,0.3)" stroke-width="1.5" stroke-dasharray="4 4" fill="none" />
+                </svg>
+                <div id="orbitalCenterBadge" class="absolute w-24 h-24 rounded-full bg-slate-950/90 border-2 border-amber-400/50 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(251,191,36,0.3)] z-10">
+                    <span class="text-sm font-extrabold text-amber-400" id="orbitalPercentText">0%</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 mt-0.5">Hội tụ AI</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- KHU VỰC GHIM THANH THÀNH TỰU & XẾP CHỒNG 7 THẺ -->
+        <section id="stackingScrollTrack" class="max-w-2xl mx-auto">
+            <div id="stackingStickyPin">
+                
+                <div class="w-full max-w-md mx-auto mb-6 text-center pb-4 border-b border-white/15 shrink-0 z-30 bg-[#06070d]/90 backdrop-blur-md">
+                    <div class="w-64 mx-auto relative pt-7">
+                        <span id="achievementRocket" class="absolute top-0 text-xl" style="left: 0%;">🚀</span>
+                        <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden border border-white/15 p-0.5">
+                            <div id="achievementBar" class="h-full rounded-full bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400" style="width: 0%;"></div>
+                        </div>
+                        <p class="mt-3 text-xs sm:text-sm font-extrabold uppercase tracking-[0.18em] text-slate-300">
+                            THÀNH TỰU <span id="achievementPct" class="text-amber-400 font-extrabold ml-1">0%</span>
+                        </p>
+                    </div>
+                    <p id="stackHintText" class="text-xs text-slate-300 font-medium mt-1.5 tracking-wide">
+                        Lăn chuột để các thẻ từ dưới trượt lên gom lại một chỗ (<span id="stackStepCounter" class="text-sky-400 font-extrabold">Đã gom 1 / 7 thẻ</span>)
+                    </p>
+                </div>
+
+                <div id="deckStageViewport">
+                    
+                    <div onclick="window.loadSampleText(); window.switchTab('mindmap'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item top-active-card astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 0; z-index: 11;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-2xl shrink-0">📖</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-500/20 text-xs font-extrabold uppercase tracking-wider text-indigo-300">BƯỚC 01</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Bài học có hướng dẫn</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Tự động bóc tách trọng tâm bài giảng và xây dựng lộ trình từng bước dễ hiểu.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.loadSampleText(); window.switchTab('flashcard'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 1; z-index: 12;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-2xl shrink-0">🎙️</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-sky-500/20 text-xs font-extrabold uppercase tracking-wider text-sky-300">BƯỚC 02</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Podcast theo chủ đề</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Nghe phát âm chuẩn bản xứ và ghi nhớ từ vựng thụ động mọi lúc mọi nơi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.loadSampleText(); window.switchTab('flashcard'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 2; z-index: 13;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">🗂️</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-xs font-extrabold uppercase tracking-wider text-emerald-300">BƯỚC 03</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Thẻ ghi nhớ 3D</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Lật thẻ 3D tương tác trực quan kèm phiên âm, câu ví dụ và từ đồng nghĩa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.loadSampleText(); window.switchTab('quiz'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 3; z-index: 14;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-sm font-extrabold text-amber-300 shrink-0 leading-tight">AB<br>CD</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/20 text-xs font-extrabold uppercase tracking-wider text-amber-300">BƯỚC 04</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Trắc nghiệm phản xạ</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Kiểm tra phản xạ đa phương án kèm lời giải thích nguyên lý chi tiết từng câu.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.loadSampleText(); window.switchTab('mindmap'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 4; z-index: 15;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-2xl shrink-0">📑</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-purple-500/20 text-xs font-extrabold uppercase tracking-wider text-purple-300">BƯỚC 05</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Bài học văn bản thông minh</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Hệ thống hóa tài liệu dài thành sơ đồ nhánh trực quan giúp thuộc bài ngay tại lớp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.loadSampleText(); window.switchTab('quiz'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 5; z-index: 16;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-2xl shrink-0">⚖️</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/20 text-xs font-extrabold uppercase tracking-wider text-rose-300">BƯỚC 06</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Bài học đúng / sai</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Rèn luyện tư duy phản biện, nhận diện nhanh các bẫy thường gặp trong đề thi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.switchTab('saved'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="deck-card-item astra-card rounded-3xl p-6 sm:p-7 cursor-pointer" style="--idx: 6; z-index: 17;">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-2xl shrink-0">🔄</div>
+                            <div class="space-y-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-md bg-teal-500/20 text-xs font-extrabold uppercase tracking-wider text-teal-300">BƯỚC 07</span>
+                                <h4 class="text-lg sm:text-xl font-extrabold font-display text-white">Ôn tập ngắt quãng</h4>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Lưu trữ từ vựng khó vào Sổ tay đám mây để ôn tập định kỳ không bao giờ quên.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: BẢNG STREAK & TRÒ CHƠI -->
+        <section id="gamificationSection" class="max-w-5xl mx-auto pt-16 pb-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex flex-col items-center px-4 py-2 rounded-2xl border border-indigo-500/40 bg-indigo-950/40 mb-4 shadow-[0_0_25px_rgba(99,102,241,0.25)]">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-300">CHƠI &amp; TIẾN BỘ</span>
+                    <span class="text-xl mt-0.5">⚛️</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold font-display tracking-tight leading-tight">
+                    Biến 🧠 việc học thành<br>điều bạn yêu thích 🖤
+                </h2>
+                <p class="mt-4 max-w-xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed">
+                    Streak tự động cập nhật khi bạn làm bài hoặc tải tài liệu. Nếu bỏ trống 1 ngày không học, ngọn lửa Streak sẽ bị dập tắt!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div class="md:col-span-2 astra-card rounded-3xl p-7 sm:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-6 space-y-4">
+                        <h3 class="text-xl sm:text-2xl font-extrabold font-display leading-snug text-slate-300">
+                            Nắm bắt khái niệm phức tạp <strong class="text-white">với hàng chục ứng dụng tương tác tích hợp sẵn.</strong>
+                        </h3>
+                        <p id="organelleDesc" class="text-xs sm:text-sm text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 rounded-2xl p-4 leading-relaxed">
+                            🔬 <strong>Không bào trung tâm:</strong> Túi chứa nước và chất dinh dưỡng lớn ở tế bào thực vật, giúp điều hòa áp suất thẩm thấu. (Hãy bấm thử vào các bào quan bên cạnh!)
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button onclick="window.inspectCell('vacuole')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-xs font-bold border border-white/15 transition">💧 Không bào trung tâm</button>
+                            <button onclick="window.inspectCell('nucleus')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-purple-500/30 text-xs font-bold border border-white/15 transition">🧬 Nhân tế bào</button>
+                            <button onclick="window.inspectCell('chloroplast')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-lime-500/30 text-xs font-bold border border-white/15 transition">🌿 Lục lạp</button>
+                            <button onclick="window.inspectCell('mitochondria')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-amber-500/30 text-xs font-bold border border-white/15 transition">⚡ Ti thể</button>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-6 flex flex-col items-center justify-center relative">
+                        <span id="organelleBadge" class="mb-2 px-3 py-1 rounded-full bg-slate-900 border border-white/20 text-xs font-bold text-emerald-300 shadow">Không bào trung tâm</span>
+                        <svg viewBox="0 0 360 220" class="w-full max-w-sm drop-shadow-[0_20px_25px_rgba(16,185,129,0.2)]">
+                            <polygon points="40,40 300,25 340,145 270,200 30,190 10,110" fill="#15803d" stroke="#86efac" stroke-width="5" stroke-linejoin="round"/>
+                            <polygon points="52,52 290,38 324,140 262,186 42,178 24,110" fill="#166534" stroke="#4ade80" stroke-width="3"/>
+                            <ellipse cx="145" cy="105" rx="75" ry="42" transform="rotate(-12 145 105)" fill="#38bdf8" fill-opacity="0.85" stroke="#bae6fd" stroke-width="3" class="cursor-pointer hover:opacity-100" onclick="window.inspectCell('vacuole')"/>
+                            <circle cx="255" cy="115" r="34" fill="#7e22ce" stroke="#d8b4fe" stroke-width="3" class="cursor-pointer" onclick="window.inspectCell('nucleus')"/>
+                            <circle cx="255" cy="115" r="14" fill="#c084fc"/>
+                            <ellipse cx="85" cy="160" rx="22" ry="11" fill="#4ade80" stroke="#bbf7d0" stroke-width="2" class="cursor-pointer" onclick="window.inspectCell('chloroplast')"/>
+                            <ellipse cx="215" cy="58" rx="20" ry="10" fill="#4ade80" stroke="#bbf7d0" stroke-width="2" class="cursor-pointer" onclick="window.inspectCell('chloroplast')"/>
+                            <ellipse cx="185" cy="162" rx="18" ry="9" fill="#fb923c" stroke="#fed7aa" stroke-width="2" class="cursor-pointer" onclick="window.inspectCell('mitochondria')"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Thẻ 2: Trò chơi 2048 -->
+                <div class="astra-card rounded-3xl p-7 flex flex-col justify-between items-center text-center">
+                    <div>
+                        <h3 class="text-xl font-extrabold font-display text-slate-300">
+                            Nghỉ giải lao <strong class="text-white">với 2048.</strong>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Dùng phím mũi tên (hoặc nút bấm) để gộp các số giống nhau!</p>
+                    </div>
+
+                    <div id="game2048Container" class="grid grid-cols-4 gap-2 my-5 p-3 rounded-2xl bg-slate-900 border border-white/10 w-60 h-60">
+                        <!-- Lưới số được tạo tự động bằng JS -->
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-1 mb-4 w-32">
+                        <div></div>
+                        <button onclick="window.move2048('up')" class="bg-slate-700 hover:bg-slate-600 text-white rounded-lg p-2 shadow pop-press">▲</button>
+                        <div></div>
+                        <button onclick="window.move2048('left')" class="bg-slate-700 hover:bg-slate-600 text-white rounded-lg p-2 shadow pop-press">◀</button>
+                        <button onclick="window.move2048('down')" class="bg-slate-700 hover:bg-slate-600 text-white rounded-lg p-2 shadow pop-press">▼</button>
+                        <button onclick="window.move2048('right')" class="bg-slate-700 hover:bg-slate-600 text-white rounded-lg p-2 shadow pop-press">▶</button>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full justify-between px-2 border-t border-white/10 pt-3">
+                        <span class="text-sm font-bold text-amber-400">Điểm: <span id="score2048Text">0</span></span>
+                        <button onclick="window.reset2048()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition pop-press">Chơi lại</button>
+                    </div>
+                </div>
+
+                <!-- Thẻ 3: Thống kê Thời gian học -->
+                <div class="astra-card rounded-3xl p-7 flex flex-col justify-between">
+                    <div class="text-center">
+                        <h3 class="text-xl font-extrabold font-display text-slate-300">
+                            Thấy tiến bộ của bạn <strong class="text-white">qua những con số.</strong>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Tự động ghi nhận số phút khi bạn phân tích tài liệu hoặc làm bài</p>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center text-xs mb-4">
+                            <span class="font-bold text-white">Thời gian học</span>
+                            <span class="text-slate-400">7 ngày qua</span>
+                        </div>
+                        <div id="weeklyChartBars" class="grid grid-cols-7 gap-2.5 items-end h-40 pt-6 px-1 border-b border-white/10"></div>
+                        <div class="grid grid-cols-7 gap-2.5 text-center text-xs font-bold text-slate-400 mt-2">
+                            <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ 4: Bảng Streak Học Tập Tự Động -->
+                <div class="astra-card rounded-3xl p-7 flex flex-col justify-between items-center text-center">
+                    <div>
+                        <h3 class="text-xl font-extrabold font-display text-slate-300">
+                            Giữ ngọn lửa <strong class="text-white">luôn cháy.</strong>
+                        </h3>
+                        <p id="streakStatusSubtitle" class="text-xs text-amber-300 font-semibold mt-1">Làm 1 bài học hoặc thả file hôm nay để thắp lửa!</p>
+                    </div>
+
+                    <div class="my-4">
+                        <div id="mainStreakFlame" class="text-6xl transition-all duration-500">🔥</div>
+                        <p class="text-xl font-extrabold text-white mt-2">Streak <span id="streakDayCount">0</span> ngày</p>
+                    </div>
+
+                    <div class="w-full bg-slate-950/90 border border-white/10 rounded-2xl p-4">
+                        <div class="grid grid-cols-7 gap-1 text-xs font-bold text-slate-400 mb-2">
+                            <span id="dayLabel-0">T2</span><span id="dayLabel-1">T3</span><span id="dayLabel-2">T4</span><span id="dayLabel-3">T5</span><span id="dayLabel-4">T6</span><span id="dayLabel-5">T7</span><span id="dayLabel-6">CN</span>
+                        </div>
+                        <div id="streakDotsRow" class="grid grid-cols-7 gap-1 items-center justify-items-center"></div>
+
+                        <div class="mt-4 pt-3 border-t border-white/10 flex flex-col gap-2">
+                            <span class="text-[11px] text-slate-400 font-semibold">Bộ mô phỏng kiểm tra quy tắc Streak:</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="window.simulateMonToFriStreak()" class="py-2 px-2 rounded-xl bg-amber-500/20 border border-amber-400/50 text-[11px] font-bold text-amber-300 hover:bg-amber-500/30 transition">
+                                    🔥 Giả lập học T2 → T6 (5 ngày)
+                                </button>
+                                <button onclick="window.simulateMissedDayExtinguish()" class="py-2 px-2 rounded-xl bg-rose-500/20 border border-rose-400/50 text-[11px] font-bold text-rose-300 hover:bg-rose-500/30 transition">
+                                    💨 Giả lập nghỉ T7 (Dập tắt về 0)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ 5: Bắt đầu Streak hôm nay -->
+                <div class="astra-card rounded-3xl p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
+                    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-32 bg-indigo-500/25 blur-3xl pointer-events-none"></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold font-display text-white max-w-xs leading-tight">
+                        Bắt đầu streak của bạn hôm nay.
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-xs mt-3 leading-relaxed">
+                        Chỉ cần tải tài liệu lên hoặc làm 1 bài mẫu ngay bây giờ, ngọn lửa của ngày hôm nay sẽ tự động bùng sáng!
+                    </p>
+                    <button onclick="window.loadSampleText(); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="mt-7 px-7 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm shadow-[0_0_25px_rgba(79,70,229,0.6)] transition">
+                        Làm bài &amp; Thắp lửa ngay
+                    </button>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t-2 border-ink bg-gradient-to-r from-[#0F256E] via-[#1E3A8A] to-[#1D4ED8] text-white mt-auto">
+        <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 space-y-3">
+                <div class="flex items-center gap-3">
+                    <img src="mascot.webp" onerror="this.onerror=null; this.src='pngtree-cute-chibi-baby-water-buffalo-sitting-with-rice-stalks-and-stars-png-image_19850430.webp';" alt="Mascot" class="w-12 h-12 rounded-xl bg-white p-1 border-2 border-ink object-contain">
+                    <div>
+                        <h3 class="text-xl font-extrabold tracking-tight">OmniStudy AI</h3>
+                        <p class="text-xs text-blue-200 font-semibold">Học thông minh, dẫn đầu xu hướng</p>
+                    </div>
+                </div>
+                <p class="text-xs text-blue-100 leading-relaxed">
+                    Nền tảng ứng dụng Trí tuệ nhân tạo hỗ trợ phân tích tài liệu, sơ đồ hóa kiến thức và rèn luyện phản xạ đa môn học dành cho học sinh THPT.
+                </p>
+            </div>
+
+            <div class="lg:col-span-4 space-y-2 text-xs text-blue-100">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Thông tin đơn vị chủ quản</h4>
+                <p>🏫 <strong>Đơn vị:</strong> The Heptagon – Trường THPT Giồng Ông Tố</p>
+                <p>📍 <strong>Địa chỉ:</strong> 10, Nguyễn Thị Định, Bình Trưng, TP. Hồ Chí Minh</p>
+                <p>📞 <strong>Hotline:</strong> 0907 602 138</p>
+                <p>✉️ <strong>Email:</strong> omnistudy.edu@gmail.com</p>
+            </div>
+
+            <div class="lg:col-span-2 space-y-2 text-xs text-blue-100">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Khám phá</h4>
+                <ul class="space-y-1.5">
+                    <li><button onclick="window.switchTab('mindmap'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="hover:text-amber-300">Sơ đồ tư duy AI</button></li>
+                    <li><button onclick="window.switchTab('flashcard'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="hover:text-amber-300">Thẻ nhớ Flashcard 3D</button></li>
+                    <li><button onclick="window.switchTab('quiz'); document.getElementById('workspaceSection').scrollIntoView({behavior:'smooth'})" class="hover:text-amber-300">Phòng luyện trắc nghiệm</button></li>
+                    <li><button onclick="document.getElementById('gamificationSection').scrollIntoView({behavior:'smooth'})" class="hover:text-amber-300">Streak &amp; Trò chơi trí tuệ</button></li>
+                </ul>
+            </div>
+
+            <div class="lg:col-span-2 space-y-2 text-xs text-blue-100">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Pháp lý</h4>
+                <ul class="space-y-1.5">
+                    <li><button onclick="window.openLegalModal('terms')" class="hover:text-amber-300 underline text-left">Điều khoản sử dụng</button></li>
+                    <li><button onclick="window.openLegalModal('privacy')" class="hover:text-amber-300 underline text-left">Chính sách bảo mật thông tin</button></li>
+                    <li><button onclick="window.openLegalModal('conditions')" class="hover:text-amber-300 underline text-left">Điều kiện &amp; hạn chế dịch vụ</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-blue-400/30 py-3 px-6 text-center text-xs text-blue-200">
+            © 2026 OmniStudy AI — Nhóm phát triển The Heptagon (Trường THPT Giồng Ông Tố). All rights reserved.
+        </div>
+    </footer>
+
+    <!-- MODAL PHÁP LÝ -->
+    <div id="legalModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center z-[70] p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col border-2 border-ink shadow-pop-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-100 p-6 flex justify-between items-center gap-4 border-b-2 border-ink relative">
+                <button onclick="window.closeLegalModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full border-2 border-ink bg-white font-bold text-slate-900">✕</button>
+                <div class="space-y-1">
+                    <span class="inline-block bg-white border border-ink px-2.5 py-0.5 rounded-full text-xs font-bold text-indigo-700">⚖️ Pháp lý OmniStudy</span>
+                    <h3 id="legalModalTitle" class="text-2xl font-extrabold text-slate-900 font-display">Điều khoản sử dụng</h3>
+                    <p class="text-xs text-slate-600 font-semibold">Chủ quản: The Heptagon (THPT Giồng Ông Tố) • Cập nhật: 23/10/2026</p>
+                </div>
+                <img src="mascot.webp" onerror="this.onerror=null; this.src='pngtree-cute-chibi-baby-water-buffalo-sitting-with-rice-stalks-and-stars-png-image_19850430.webp';" class="w-20 h-20 object-contain shrink-0" alt="Mascot">
+            </div>
+            <div id="legalModalBody" class="p-6 overflow-y-auto space-y-3 text-sm text-slate-700 leading-relaxed"></div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG NHẬP CLOUD -->
+    <div id="authModal" class="fixed inset-0 z-[60] flex hidden items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+        <div class="relative w-full max-w-md rounded-3xl border-2 border-ink bg-white shadow-pop-lg">
+            <button onclick="window.closeAuthModal()" class="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full border-2 border-ink bg-white font-bold pop-press z-10 text-slate-900">✕</button>
+            <div class="border-b-2 border-ink bg-amber-400 p-6 text-center rounded-t-[1.3rem]">
+                <div class="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-2xl border-2 border-ink bg-white text-3xl shadow-pop">👋</div>
+                <h3 class="text-2xl font-extrabold font-display text-amber-950">Đồng bộ The Heptagon Cloud</h3>
+            </div>
+            <div class="flex border-b-2 border-ink bg-slate-50">
+                <button onclick="window.switchAuthTab('email')" id="tab-auth-email" class="flex-1 border-r-2 border-ink py-3 text-sm font-bold bg-white text-slate-900">✉️ Email</button>
+                <button onclick="window.switchAuthTab('sms')" id="tab-auth-sms" class="flex-1 py-3 text-sm font-bold text-slate-500 hover:bg-slate-100">📱 SMS OTP</button>
+            </div>
+            <div class="p-6">
+                <div id="auth-email-section" class="space-y-4">
+                    <div id="nameField" class="hidden">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Họ và tên</label>
+                        <input type="text" id="regName" class="w-full rounded-xl border-2 border-ink bg-slate-50 p-3 text-sm font-bold outline-none text-slate-900 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Email</label>
+                        <input type="email" id="authEmail" class="w-full rounded-xl border-2 border-ink bg-slate-50 p-3 text-sm font-bold outline-none text-slate-900 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Mật khẩu (tối thiểu 6 ký tự)</label>
+                        <input type="password" id="authPass" class="w-full rounded-xl border-2 border-ink bg-slate-50 p-3 text-sm font-bold outline-none text-slate-900 focus:bg-white">
+                    </div>
+                    <button onclick="window.handleAuthSubmit()" id="authSubmitBtn" class="w-full rounded-xl border-2 border-ink bg-indigo-600 py-3.5 font-extrabold text-white shadow-pop pop-press mt-2">
+                        Đăng nhập
+                    </button>
+                    <div class="text-center text-sm font-medium mt-4">
+                        <span id="authSwitchText" class="text-slate-600">Học viên mới?</span> 
+                        <button onclick="window.toggleAuthMode()" id="authSwitchBtn" class="font-bold text-indigo-600 underline">Tạo tài khoản</button>
+                    </div>
+                </div>
+                <div id="auth-sms-section" class="space-y-4 hidden">
+                    <div id="phoneInputGroup">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Số điện thoại</label>
+                        <div class="flex gap-2">
+                            <span class="flex items-center rounded-xl border-2 border-ink bg-slate-200 px-3 font-bold text-slate-900">+84</span>
+                            <input type="tel" id="phoneNumber" placeholder="907 602 138" class="flex-1 rounded-xl border-2 border-ink bg-slate-50 p-3 text-sm font-bold outline-none text-slate-900 focus:bg-white">
+                        </div>
+                        <div id="recaptcha-container" class="absolute hidden -z-10"></div>
+                        <button onclick="window.sendOTP()" id="sendOtpBtn" class="mt-4 w-full rounded-xl border-2 border-ink bg-indigo-600 py-3.5 font-extrabold text-white shadow-pop pop-press">
+                            Gửi mã OTP
+                        </button>
+                    </div>
+                    <div id="otpInputGroup" class="hidden">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Nhập mã (6 số)</label>
+                        <input type="text" id="otpCode" class="w-full text-center tracking-widest rounded-xl border-2 border-ink bg-slate-50 p-3 text-xl font-extrabold outline-none text-slate-900 focus:bg-white">
+                        <button onclick="window.verifyOTP()" id="verifyOtpBtn" class="mt-4 w-full rounded-xl border-2 border-ink bg-emerald-400 py-3.5 font-extrabold text-slate-900 shadow-pop pop-press">
+                            Xác nhận Đăng nhập
+                        </button>
+                        <button onclick="window.resetSMSFlow()" class="mt-3 w-full font-bold text-slate-500 text-sm">Thử số khác</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HỒ SƠ -->
+    <div id="profileModal" class="fixed inset-0 z-[65] flex hidden items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+        <div class="relative w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-3xl border-2 border-ink bg-white shadow-pop-lg">
+            <button onclick="window.closeProfileModal()" class="sticky top-4 float-right mr-4 mt-4 grid h-8 w-8 place-items-center rounded-full border-2 border-ink bg-white font-bold pop-press z-10 text-slate-900">✕</button>
+            <div class="p-6 md:p-8">
+                <h3 class="text-2xl font-extrabold font-display mb-1">Thông tin cá nhân học sinh</h3>
+                <p class="text-xs text-slate-500 font-semibold mb-5">Cập nhật ảnh đại diện và hồ sơ trường lớp (The Heptagon)</p>
+
+                <div class="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl border-2 border-ink bg-slate-50 mb-5">
+                    <img id="profileAvatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Heptagon" class="w-20 h-20 rounded-full border-2 border-ink shadow-pop object-cover bg-white shrink-0">
+                    <div class="flex-1 space-y-2 text-center sm:text-left w-full">
+                        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                            <label class="cursor-pointer rounded-xl border-2 border-ink bg-amber-400 px-3 py-1.5 text-xs font-extrabold text-slate-900 shadow-pop pop-press">
+                                📷 Tải ảnh từ máy
+                                <input type="file" accept="image/*" class="hidden" onchange="window.handleAvatarFileUpload(event)">
+                            </label>
+                            <button type="button" onclick="window.pickPresetAvatar('Felix')" class="px-2.5 py-1 rounded-lg border border-ink bg-white text-xs font-bold text-slate-900">Mẫu 1</button>
+                            <button type="button" onclick="window.pickPresetAvatar('Aneka')" class="px-2.5 py-1 rounded-lg border border-ink bg-white text-xs font-bold text-slate-900">Mẫu 2</button>
+                            <button type="button" onclick="window.pickPresetAvatar('Bottts')" class="px-2.5 py-1 rounded-lg border border-ink bg-white text-xs font-bold text-slate-900">Robot</button>
+                        </div>
+                        <input type="text" id="profileAvatar" placeholder="Hoặc dán trực tiếp link ảnh đại diện..." class="w-full rounded-xl border border-slate-300 bg-white p-2 text-xs font-semibold outline-none text-slate-900" oninput="if(this.value) document.getElementById('profileAvatarPreview').src = this.value">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="text-xs font-bold text-slate-700 mb-1 block">Họ và tên hiển thị <span class="text-rose-500">*</span></label>
+                            <input type="text" id="profileName" placeholder="Nguyễn Trung" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-700 mb-1 block">Nickname</label>
+                            <input type="text" id="profileNickname" placeholder="Heptagon Member" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-700 mb-1 block">Email <span class="text-rose-500">*</span></label>
+                        <input type="email" id="profileEmail" placeholder="trungnguyen672009@gmail.com" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-700 mb-1 block">Ngày tháng năm sinh <span class="text-rose-500">*</span></label>
+                        <input type="date" id="profileDob" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="text-xs font-bold text-slate-700 mb-1 block">Số điện thoại <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-slate-400 text-sm">📞</span>
+                                <input type="tel" id="profilePhone" placeholder="0912345678" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 pl-9 pr-3 py-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-700 mb-1 block">Tỉnh / Thành phố <span class="text-rose-500">*</span></label>
+                            <select id="profileProvince" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                                <option value="">Chọn tỉnh / thành phố</option>
+                                <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                                <option value="Hà Nội">Hà Nội</option>
+                                <option value="Đà Nẵng">Đà Nẵng</option>
+                                <option value="Cần Thơ">Cần Thơ</option>
+                                <option value="Hải Phòng">Hải Phòng</option>
+                                <option value="Tỉnh / Thành khác">Tỉnh / Thành khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-700 mb-1 block">Trường THPT đang học <span class="text-rose-500">*</span></label>
+                        <input type="text" id="profileSchool" placeholder="THPT Giồng Ông Tố" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-700 mb-1 block">Lớp <span class="text-rose-500">*</span></label>
+                        <select id="profileGrade" class="w-full rounded-xl border border-slate-300 bg-slate-50/70 p-3 text-sm font-semibold outline-none text-slate-900 focus:border-indigo-600 focus:bg-white">
+                            <option value="">Chọn lớp</option>
+                            <option value="Lớp 10">Lớp 10 (10A5, ...)</option>
+                            <option value="Lớp 11">Lớp 11 (11A8, ...)</option>
+                            <option value="Lớp 12">Lớp 12</option>
+                            <option value="Giáo viên / Cố vấn">Giáo viên / Cố vấn</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between rounded-2xl border-2 border-ink bg-slate-50 p-3.5">
+                        <span class="font-extrabold text-sm text-slate-900">🌙 Giao diện Tối (Dark Mode)</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="profileDarkMode" class="sr-only peer" onchange="window.toggleDarkMode(this.checked)">
+                            <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 border-2 border-ink"></div>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="window.saveProfile()" class="flex-1 rounded-xl border-2 border-ink bg-emerald-400 py-3.5 font-extrabold text-slate-900 shadow-pop pop-press">💾 Lưu hồ sơ cá nhân</button>
+                        <button id="signOutProfileBtn" onclick="window.signOutApp()" class="hidden rounded-xl border-2 border-ink bg-rose-400 px-4 py-3.5 font-extrabold text-slate-900 shadow-pop pop-press">Đăng xuất</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENGINE SỐ 1: JAVASCRIPT GIAO DIỆN -->
+    <script>
+        const IS_PRODUCTION = false; 
+
+        let studyData = null;
+        let currentCardIndex = 0;
+        let savedItems = JSON.parse(localStorage.getItem('omniLocalSaved') || '[]');
+        let completedQuizzes = 0;
+        window.currentUserUid = null;
+        window.isRegisterMode = false;
+        const BRANCH_COLORS = ["bg-indigo-200 text-indigo-900", "bg-emerald-200 text-emerald-900", "bg-amber-200 text-amber-900", "bg-rose-200 text-rose-900"];
+
+        const BUILTIN_SAMPLE_DATA = {
+            mindmap: [
+                { title: "1. Khái niệm Sống Xanh", points: ["Sustainable: Bền vững, thân thiện môi trường", "Giảm thiểu Carbon footprint (Dấu chân carbon)"] },
+                { title: "2. Năng lượng & Tái chế", points: ["Renewable energy: Năng lượng tái tạo (mặt trời, gió)", "Recycle: Tái chế chai nhựa, giấy, kim loại"] },
+                { title: "3. Thách thức Môi trường", points: ["Pollution: Ô nhiễm không khí và nguồn nước", "Deforestation: Nạn phá rừng làm mất môi trường sống"] },
+                { title: "4. Hành động Thực tiễn", points: ["Sử dụng túi vải thay túi nilon khó phân hủy", "Tiết kiệm điện và trồng thêm cây xanh"] }
+            ],
+            flashcards: [
+                { front: "Sustainable", pos: "Adjective", pronunciation: "/səˈsteɪ.nə.bəl/", back: "Bền vững, không gây hại môi trường", example: "Sustainable energy is the future.", syn_ant: "Đồng nghĩa: Eco-friendly" },
+                { front: "Carbon footprint", pos: "Noun", pronunciation: "/ˌkɑː.bən ˈfʊt.prɪnt/", back: "Dấu chân carbon (lượng khí thải CO2)", example: "Cycling reduces your carbon footprint.", syn_ant: "Liên quan: Greenhouse gas" },
+                { front: "Renewable", pos: "Adjective", pronunciation: "/rɪˈnjuː.ə.bəl/", back: "Có thể tái tạo được", example: "Solar power is a renewable energy source.", syn_ant: "Trái nghĩa: Non-renewable" },
+                { front: "Decompose", pos: "Verb", pronunciation: "/ˌdiː.kəmˈpəʊz/", back: "Phân hủy tự nhiên", example: "Plastic bags take hundreds of years to decompose.", syn_ant: "Đồng nghĩa: Decay, break down" }
+            ],
+            quizzes: [
+                { question: "Từ nào dưới đây mang nghĩa 'Bền vững, thân thiện với môi trường'?", options: ["Sustainable", "Pollution", "Deforestation", "Chemical"], answer: 0, explanation: "'Sustainable' (adj) nghĩa là bền vững, duy trì lâu dài mà không làm hại môi trường." },
+                { question: "Hành động nào giúp giảm thiểu 'Carbon footprint' (Dấu chân carbon)?", options: ["Đốt rác thải nhựa", "Đi xe đạp hoặc phương tiện công cộng", "Chặt phá rừng tự nhiên", "Sử dụng nhiều túi nilon"], answer: 1, explanation: "Đi trực tiếp giúp giảm lượng khí thải CO2 ra môi trường, từ đó giảm Carbon footprint." },
+                { question: "'Solar power' (Năng lượng mặt trời) thuộc nhóm năng lượng nào?", options: ["Năng lượng hóa thạch", "Năng lượng tái tạo (Renewable)", "Năng lượng gây ô nhiễm", "Năng lượng hạt nhân"], answer: 1, explanation: "Năng lượng mặt trời và năng lượng gió là nguồn năng lượng tái tạo (Renewable energy)." }
+            ]
+        };
+
+        window.showToast = (message, type = "success") => {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            let colors = "bg-emerald-400 text-slate-900";
+            let icon = "✅";
+            if (type === "error") { colors = "bg-rose-400 text-slate-900"; icon = "⚠️"; }
+            else if (type === "info") { colors = "bg-amber-400 text-slate-900"; icon = "💡"; }
+
+            toast.className = `flex items-center gap-3 border-2 border-ink ${colors} px-5 py-3 rounded-2xl shadow-pop transform transition-all duration-300 translate-y-10 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `<span class="text-xl">${icon}</span> <span class="font-bold text-sm">${message}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3400);
+        };
+
+        // --- HIỆU ỨNG WAVE CHO HERO TITLE ---
+        function initWaveTitle() {
+            const titleEl = document.getElementById('heroTitle');
+            if (!titleEl) return;
+            
+            titleEl.innerHTML = '';
+            
+            const rawText = "Biến tài liệu khô khan thành kiến thức dễ nhớ.";
+            const words = rawText.split(' ');
+            
+            words.forEach((word) => {
+                const isHighlight = word.includes('kiến') || word.includes('thức');
+                const wordWrap = document.createElement('span');
+                wordWrap.className = 'wave-word ' + (isHighlight ? 'highlight-word' : '');
+                
+                if (word.includes('thức')) {
+                    wordWrap.innerHTML = `<svg viewBox="0 0 200 12" fill="none"><path d="M2 9C50 2 150 2 198 9" stroke="currentColor" stroke-width="4" stroke-linecap="round" /></svg>`;
+                }
+
+                Array.from(word).forEach(char => {
+                    const letter = document.createElement('span');
+                    letter.className = 'wave-letter';
+                    letter.textContent = char;
+                    wordWrap.appendChild(letter);
+                });
+
+                titleEl.appendChild(wordWrap);
+            });
+
+            let L = [];
+            document.querySelectorAll('.wave-letter').forEach(el => {
+                L.push({ el: el, x: 0, y: 0, v: 0 });
+            });
+
+            function measure() {
+                L.forEach(l => {
+                    l.x = l.el.offsetLeft + l.el.offsetWidth / 2;
+                });
+            }
+
+            let amp = 24, px = null, pulse = null, raf = 0;
+            const SIG = 24;
+            const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function g(d, s) { return Math.exp(-(d * d) / (2 * s * s)); }
+
+            function tick(now) {
+                raf = 0;
+                let moving = false, pc = null;
+                if (pulse) {
+                    let k = (now - pulse) / 1100;
+                    if (k >= 1) pulse = null; else pc = -60 + (titleEl.offsetWidth + 120) * k;
+                }
+                L.forEach(l => {
+                    let tgt = 0;
+                    if (px != null) tgt -= amp * g(l.x - px, SIG);
+                    if (pc != null) tgt -= amp * 1.35 * g(l.x - pc, SIG * 1.2);
+                    l.v += (tgt - l.y) * 0.16;
+                    l.v *= 0.8;
+                    l.y += l.v;
+                    if (Math.abs(l.v) > 0.02 || Math.abs(tgt - l.y) > 0.05) moving = true;
+                    let t = Math.min(1, Math.max(0, -l.y / 40));
+                    l.el.style.setProperty('--y', l.y.toFixed(2) + 'px');
+                    l.el.style.setProperty('--sy', (1 + Math.max(-0.08, Math.min(0.14, -l.v * 0.02))).toFixed(3));
+                    l.el.style.setProperty('--t', t.toFixed(3));
+                });
+                if (moving || pulse || px != null) raf = requestAnimationFrame(tick);
+            }
+
+            function kick() { if (!raf && !rm) raf = requestAnimationFrame(tick); }
+            
+            function local(e) { 
+                let r = titleEl.getBoundingClientRect(); 
+                return (e.clientX - r.left) * (titleEl.offsetWidth / (r.width || 1)); 
+            }
+
+            titleEl.addEventListener('pointermove', function (e) { 
+                if (!L[0].x) measure(); 
+                px = local(e); 
+                kick(); 
+            });
+            titleEl.addEventListener('pointerleave', function () { 
+                px = null; 
+                kick(); 
+            });
+            
+            measure();
+            setTimeout(() => {
+                pulse = performance.now();
+                kick();
+            }, 800);
+            
+            window.addEventListener('resize', () => {
+                measure();
+            });
+        }
+
+        // --- MAGNIFY DOCK ---
+        function initMagnifyDock() {
+            const dk = document.querySelector('.u208-dk');
+            const tip = document.querySelector('.u208-tip');
+            if (!dk) return;
+            
+            const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const TAB_NAMES = ['Sơ đồ', 'Thẻ nhớ', 'Trắc nghiệm', 'Sổ tay'];
+            const TAB_IDS = ['mindmap', 'flashcard', 'quiz', 'saved'];
+            
+            const ICONS = [
+                ['#A5D8FF', '#339AF0', '<path d="M12 24c0-6.6 5.4-12 12-12s12 5.4 12 12M24 12v24M12 24h24" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'], 
+                ['#FF8787', '#E03131', '<rect x="10" y="10" width="28" height="20" rx="3" fill="#fff" opacity="0.9"/><path d="M10 20l14 8 14-8" stroke="#E03131" stroke-width="2.5" fill="none"/>'], 
+                ['#8CE99A', '#2B8A3E', '<path d="M14 24l6 6 14-14" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'], 
+                ['#FFF3BF', '#FCC419', '<rect x="12" y="8" width="24" height="32" rx="3" fill="#fff"/><path d="M16 16h16M16 24h16M16 32h10" stroke="#FAB005" stroke-width="2.5" stroke-linecap="round"/>']
+            ];
+
+            let mx = null, fi = -1, raf = 0;
+            const BASE = 40; 
+            const MAX = 64;  
+            const SPREAD = 65; 
+            const GAP = 8;
+            
+            const A = ICONS.map(function (ic, i) {
+                const b = document.createElement('button'); 
+                b.type = 'button'; 
+                b.className = 'u208-a'; 
+                b.id = 'dock-btn-' + TAB_IDS[i];
+                if(i===0) b.classList.add('active-tab');
+                
+                b.setAttribute('aria-label', TAB_NAMES[i]);
+                b.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="dockGrad' + i + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + ic[0] + '"/><stop offset="1" stop-color="' + ic[1] + '"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#dockGrad' + i + ')"/><g transform="translate(0, 0)">' + ic[2] + '</g></svg>';
+                
+                b.addEventListener('click', function () { 
+                    b.classList.remove('is-hop'); 
+                    void b.offsetWidth; 
+                    b.classList.add('is-hop'); 
+                    window.switchTab(TAB_IDS[i]); 
+                });
+                b.addEventListener('focus', function () { mx = null; fi = i; run(); });
+                b.addEventListener('blur', function () { fi = -1; run(); });
+                dk.appendChild(b);
+                return { el: b, s: BASE };
+            });
+
+            function frame() {
+                raf = 0;
+                let busy = false, best = -1, bestS = 0;
+                A.forEach(function (a, i) {
+                    let c = (i - (A.length - 1) / 2) * (BASE + GAP), tg = BASE;
+                    if (mx !== null) { 
+                        let d = (mx - c) / SPREAD; 
+                        tg = BASE + (MAX - BASE) * Math.exp(-d * d * 1.6); 
+                    } else if (fi === i) {
+                        tg = MAX * 0.8;
+                    }
+                    a.s += (tg - a.s) * (rm ? 1 : 0.28);
+                    if (Math.abs(tg - a.s) > 0.1) busy = true; else a.s = tg;
+                    
+                    a.el.style.setProperty('--s', a.s.toFixed(2) + 'px'); 
+                    a.el.style.setProperty('--lift', ((a.s - BASE) * 0.35).toFixed(2) + 'px');
+                    
+                    if (a.s > bestS) { bestS = a.s; best = i; }
+                });
+                
+                if ((mx !== null || fi >= 0) && bestS > BASE + 5) {
+                    let el = A[best].el;
+                    let containerRect = document.getElementById('dockMenuContainer').getBoundingClientRect();
+                    let elRect = el.getBoundingClientRect();
+                    let centerOffset = elRect.left + (elRect.width / 2) - containerRect.left;
+                    
+                    tip.textContent = TAB_NAMES[best]; 
+                    tip.style.left = centerOffset + 'px';
+                    tip.classList.add('is-on');
+                } else {
+                    tip.classList.remove('is-on');
+                }
+                
+                if (busy) raf = requestAnimationFrame(frame);
+            }
+            
+            function run() { if (!raf) raf = requestAnimationFrame(frame); }
+            
+            dk.addEventListener('pointermove', function (e) {
+                let dr = dk.getBoundingClientRect();
+                mx = e.clientX - (dr.left + dr.width / 2);
+                run();
+            });
+            dk.addEventListener('pointerleave', function () { 
+                mx = null; 
+                run(); 
+            });
+        }
+        
+        // --- CHỨC NĂNG CHUNG ---
+        window.switchTab = (tabName) => {
+            ['mindmap', 'flashcard', 'quiz', 'saved', 'empty'].forEach(t => {
+                const view = document.getElementById('view-' + t);
+                if (view) view.classList.add('hidden');
+                
+                const dockBtn = document.getElementById('dock-btn-' + t);
+                if (dockBtn) dockBtn.classList.remove('active-tab');
+            });
+            
+            const targetView = document.getElementById('view-' + tabName);
+            if (targetView) targetView.classList.remove('hidden');
+            
+            const targetDockBtn = document.getElementById('dock-btn-' + tabName);
+            if (targetDockBtn) targetDockBtn.classList.add('active-tab');
+        };
+        
+        function updateScrollAnimations() {
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+
+            const orbitalSection = document.getElementById('orbitalTriggerSection');
+            if (orbitalSection) {
+                const rect = orbitalSection.getBoundingClientRect();
+                const startY = vh * 0.88;
+                const endY = -rect.height * 0.15;
+                const rawP = (startY - rect.top) / (startY - endY);
+                const progress = Math.max(0, Math.min(1, rawP));
+
+                const beamProgress = Math.min(1, progress * 1.35);
+                document.querySelectorAll('.beam-line').forEach(line => {
+                    line.style.strokeDashoffset = String(450 * (1 - beamProgress));
+                });
+
+                document.querySelectorAll('.orbital-item').forEach((item, idx) => {
+                    const box = item.querySelector('.astra-icon-box');
+                    const pullY = progress * 12;
+                    item.style.transform = `translate3d(0, ${pullY}px, 0)`;
+                    if (box) {
+                        if (progress > (idx + 1) * 0.1) box.classList.add('active-glow');
+                        else box.classList.remove('active-glow');
+                    }
+                });
+
+                const ringSvg = document.getElementById('orbitalRingSvg');
+                const progressRing = document.getElementById('orbitalProgressRing');
+                const emblem = document.getElementById('coreFloatingEmblem');
+                const wheelAssembly = document.getElementById('orbitalWheelAssembly');
+                const pctText = document.getElementById('orbitalPercentText');
+                const glowAura = document.getElementById('orbitalGlowAura');
+
+                if (progressRing) progressRing.style.strokeDashoffset = String(502 * (1 - progress));
+                if (ringSvg) ringSvg.style.transform = `rotate(${progress * 320}deg) scale(${0.92 + progress * 0.14})`;
+                if (pctText) pctText.innerText = `${Math.round(progress * 100)}%`;
+                if (glowAura) glowAura.style.transform = `scale(${0.85 + progress * 0.7})`;
+
+                if (emblem && wheelAssembly) {
+                    if (progress <= 0.65) {
+                        const t = progress / 0.65;
+                        const moveY = t * 188;
+                        const rot = t * 180;
+                        emblem.style.transform = `translate3d(-50%, ${moveY}px, 0) rotate(${rot}deg) scale(${1 + t * 0.12})`;
+                        wheelAssembly.style.transform = `translate3d(0, 0px, 0)`;
+                    } else {
+                        const t2 = (progress - 0.65) / 0.35;
+                        const carryDown = t2 * 95;
+                        const fastSpin = 180 + t2 * 360;
+                        emblem.style.transform = `translate3d(-50%, ${188 + carryDown}px, 0) rotate(${fastSpin}deg) scale(${1.12 - t2 * 0.15})`;
+                        wheelAssembly.style.transform = `translate3d(0, ${carryDown}px, 0)`;
+                    }
+                }
+            }
+
+            // HIỆU ỨNG GHIM CỐ ĐỊNH THANH THÀNH TỰU & XẾP CHỒNG 7 THẺ
+            const track = document.getElementById('stackingScrollTrack');
+            if (track) {
+                const rect = track.getBoundingClientRect();
+                const stickyOffset = 72;
+                const scrollableDist = Math.max(1, rect.height - (vh - stickyOffset));
+                const rawScrolled = stickyOffset - rect.top;
+
+                const progress = Math.max(0, Math.min(1, rawScrolled / scrollableDist));
+                const pct = Math.round(progress * 100);
+
+                const bar = document.getElementById('achievementBar');
+                const rocket = document.getElementById('achievementRocket');
+                const pctLabel = document.getElementById('achievementPct');
+                const stepCounter = document.getElementById('stackStepCounter');
+
+                if (bar) bar.style.width = `${pct}%`;
+                if (rocket) rocket.style.left = `calc(${pct}% - 12px)`;
+                if (pctLabel) pctLabel.innerText = `${pct}%`;
+
+                const cards = document.querySelectorAll('.deck-card-item');
+                const N = cards.length;
+                const totalStages = N - 1;
+                const stage = progress * totalStages;
+                const gatheredCount = Math.min(N, Math.floor(stage + 0.05) + 1);
+                const activeTopIndex = Math.min(N - 1, Math.floor(stage + 0.05));
+
+                if (stepCounter) {
+                    stepCounter.innerText = pct >= 100
+                        ? `Đã gom đủ 7 / 7 thẻ — Tiếp tục lăn chuột xuống dưới!`
+                        : `Đã gom ${gatheredCount} / ${N} thẻ`;
+                }
+
+                const stackedGap = 8;
+
+                cards.forEach((card, i) => {
+                    if (i === 0) {
+                        const buriedDepth = Math.min(totalStages, stage);
+                        const scale = 1 - buriedDepth * 0.018;
+                        const brightness = Math.max(0.45, 1 - buriedDepth * 0.08);
+                        card.style.opacity = '1';
+                        card.style.filter = `brightness(${brightness})`;
+                        card.style.transform = `translate3d(0, 0px, 0) scale(${scale})`;
+                    } else {
+                        const cardProgress = Math.max(0, Math.min(1, stage - (i - 1)));
+                        const startY = vh * 0.85; 
+                        const targetY = i * stackedGap;
+                        const currentY = startY * (1 - cardProgress) + targetY * cardProgress;
+
+                        const buriedDepth = Math.max(0, stage - i);
+                        const scale = Math.max(0.88, 1 - buriedDepth * 0.018);
+                        const brightness = Math.max(0.45, 1 - buriedDepth * 0.08);
+
+                        card.style.opacity = cardProgress > 0.01 ? '1' : '0';
+                        card.style.filter = `brightness(${brightness})`;
+                        card.style.transform = `translate3d(0, ${currentY}px, 0) scale(${scale})`;
+                    }
+
+                    if (i === activeTopIndex) card.classList.add('top-active-card');
+                    else card.classList.remove('top-active-card');
+                });
+            }
+        }
+
+        window.addEventListener('scroll', updateScrollAnimations, { passive: true });
+        window.addEventListener('wheel', updateScrollAnimations, { passive: true });
+        window.addEventListener('touchmove', updateScrollAnimations, { passive: true });
+        window.addEventListener('resize', updateScrollAnimations);
+
+        function toDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getWeekdayIndex(dateObj) {
+            return (dateObj.getDay() + 6) % 7;
+        }
+
+        function diffCalendarDays(dateKeyA, dateKeyB) {
+            if (!dateKeyA || !dateKeyB) return 999;
+            const a = new Date(dateKeyA + "T00:00:00");
+            const b = new Date(dateKeyB + "T00:00:00");
+            return Math.round((b - a) / (1000 * 60 * 60 * 24));
+        }
+
+        let weeklyMinutes = JSON.parse(localStorage.getItem('omniWeeklyMinsV2') || '[17, 8, 12, 5, 14, 0, 0]');
+        let streakState = JSON.parse(localStorage.getItem('omniStreakStateV2') || 'null') || {
+            streakCount: 0,
+            lastActiveDate: null,
+            daysActive: [false, false, false, false, false, false, false]
+        };
+
+        function checkStreakOnVisit() {
+            const now = new Date();
+            const todayKey = toDateKey(now);
+            const todayIdx = getWeekdayIndex(now);
+
+            for (let i = 0; i < 7; i++) {
+                const lbl = document.getElementById('dayLabel-' + i);
+                if (lbl) {
+                    lbl.className = (i === todayIdx)
+                        ? "text-amber-400 font-extrabold underline"
+                        : "text-slate-400";
+                }
+            }
+
+            if (streakState.lastActiveDate) {
+                const gap = diffCalendarDays(streakState.lastActiveDate, todayKey);
+                if (gap > 1) {
+                    streakState.streakCount = 0;
+                    streakState.daysActive = [false, false, false, false, false, false, false];
+                    localStorage.setItem('omniStreakStateV2', JSON.stringify(streakState));
+                }
+            }
+            window.renderWeeklyStats();
+        }
+
+        window.recordStudyActivity = (reasonText, minutesAdded = 3) => {
+            const now = new Date();
+            const todayKey = toDateKey(now);
+            const todayIdx = getWeekdayIndex(now);
+
+            weeklyMinutes[todayIdx] = (weeklyMinutes[todayIdx] || 0) + minutesAdded;
+            localStorage.setItem('omniWeeklyMinsV2', JSON.stringify(weeklyMinutes));
+
+            const gap = diffCalendarDays(streakState.lastActiveDate, todayKey);
+
+            if (streakState.lastActiveDate !== todayKey) {
+                if (gap === 1) {
+                    streakState.streakCount += 1;
+                } else {
+                    streakState.streakCount = 1;
+                    streakState.daysActive = [false, false, false, false, false, false, false];
+                }
+                streakState.daysActive[todayIdx] = true;
+                streakState.lastActiveDate = todayKey;
+                localStorage.setItem('omniStreakStateV2', JSON.stringify(streakState));
+
+                window.renderWeeklyStats();
+                window.showToast(`🔥 ${reasonText}: Ngọn lửa Streak hôm nay đã bùng sáng (${streakState.streakCount} ngày)!`, "success");
+            } else {
+                streakState.daysActive[todayIdx] = true;
+                localStorage.setItem('omniStreakStateV2', JSON.stringify(streakState));
+                window.renderWeeklyStats();
+            }
+
+            if (IS_PRODUCTION && window.syncCloudStreak) {
+                window.syncCloudStreak(streakState, weeklyMinutes);
+            }
+        };
+
+        window.simulateMonToFriStreak = () => {
+            const now = new Date();
+            const todayKey = toDateKey(now);
+            streakState = {
+                streakCount: 5,
+                lastActiveDate: todayKey,
+                daysActive: [true, true, true, true, true, false, false]
+            };
+            localStorage.setItem('omniStreakStateV2', JSON.stringify(streakState));
+            window.renderWeeklyStats();
+            window.showToast("🔥 Đã mô phỏng học liên tục từ Thứ 2 đến Thứ 6 (Streak 5 ngày)!", "info");
+        };
+
+        window.simulateMissedDayExtinguish = () => {
+            const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+            streakState.lastActiveDate = toDateKey(threeDaysAgo);
+            checkStreakOnVisit();
+            window.showToast("💨 Do bỏ trống ngày Thứ 7 không vào học, toàn bộ chuỗi Streak T2→T6 đã bị dập tắt về 0!", "error");
+        };
+
+        window.renderWeeklyStats = () => {
+            const chart = document.getElementById('weeklyChartBars');
+            if (chart) {
+                const maxVal = Math.max(20, ...weeklyMinutes);
+                chart.innerHTML = weeklyMinutes.map((m) => {
+                    const heightPct = Math.max(6, Math.round((m / maxVal) * 100));
+                    return `
+                        <div class="flex flex-col items-center justify-end h-full gap-1.5">
+                            <span class="text-[10px] font-bold text-slate-300">${m > 0 ? m + 'p' : ''}</span>
+                            <div class="w-full rounded-t-lg bg-gradient-to-t from-blue-600 to-sky-400 transition-all duration-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]" style="height: ${heightPct}%;"></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const countEl = document.getElementById('streakDayCount');
+            const flameEl = document.getElementById('mainStreakFlame');
+            const subEl = document.getElementById('streakStatusSubtitle');
+            const headerFire = document.getElementById('headerFireIcon');
+
+            if (countEl) countEl.innerText = streakState.streakCount;
+
+            if (streakState.streakCount > 0) {
+                if (flameEl) flameEl.className = "text-6xl drop-shadow-[0_0_28px_rgba(249,115,22,0.95)] animate-bounce";
+                if (subEl) {
+                    subEl.innerText = "🔥 Ngọn lửa hôm nay đang cháy rực rỡ! Hãy duy trì vào ngày mai nhé.";
+                    subEl.className = "text-xs text-emerald-400 font-bold mt-1";
+                }
+                if (headerFire) headerFire.innerText = "🔥";
+            } else {
+                if (flameEl) flameEl.className = "text-6xl grayscale opacity-40";
+                if (subEl) {
+                    subEl.innerText = "⚠️ Ngọn lửa đang tắt! Hãy thả file hoặc làm 1 bài học để thắp lửa hôm nay.";
+                    subEl.className = "text-xs text-rose-400 font-bold mt-1";
+                }
+                if (headerFire) headerFire.innerText = "🖤";
+            }
+
+            const dotsRow = document.getElementById('streakDotsRow');
+            if (dotsRow) {
+                dotsRow.innerHTML = streakState.daysActive.map(active => active
+                    ? `<div class="w-8 h-8 rounded-full bg-amber-500/25 border-2 border-amber-400 flex items-center justify-center text-sm shadow-[0_0_12px_rgba(251,191,36,0.65)]">🔥</div>`
+                    : `<div class="w-8 h-8 rounded-full bg-slate-800/90 border border-white/10 flex items-center justify-center text-xs grayscale opacity-35">🔥</div>`
+                ).join('');
+            }
+        };
+
+        const ORGANELLE_DATA = {
+            vacuole: { title: "Không bào trung tâm", desc: "🔬 <strong>Không bào trung tâm:</strong> Túi chứa nước và chất dinh dưỡng lớn ở tế bào thực vật, giúp điều hòa áp suất thẩm thấu." },
+            nucleus: { title: "Nhân tế bào", desc: "🧬 <strong>Nhân tế bào:</strong> Trung tâm điều khiển mọi hoạt động sống của tế bào, chứa nhiễm sắc thể mang thông tin di truyền ADN." },
+            chloroplast: { title: "Lục lạp", desc: "🌿 <strong>Lục lạp:</strong> Bào quan chứa chất diệp lục giúp hấp thụ năng lượng ánh sáng mặt trời để thực hiện quá trình quang hợp." },
+            mitochondria: { title: "Ti thể", desc: "⚡ <strong>Ti thể:</strong> 'Nhà máy năng lượng' của tế bào, thực hiện hô hấp tế bào tạo ra phân tử ATP cung cấp năng lượng." }
+        };
+        window.inspectCell = (key) => {
+            const item = ORGANELLE_DATA[key];
+            if (!item) return;
+            document.getElementById('organelleBadge').innerText = item.title;
+            document.getElementById('organelleDesc').innerHTML = item.desc;
+        };
+
+        let board2048 = Array(16).fill(0);
+        let score2048 = 0;
+
+        window.init2048 = () => {
+            board2048 = Array(16).fill(0);
+            score2048 = 0;
+            window.addRandomTile2048();
+            window.addRandomTile2048();
+            window.render2048();
+        };
+
+        window.addRandomTile2048 = () => {
+            let empty = [];
+            for (let i = 0; i < 16; i++) {
+                if (board2048[i] === 0) empty.push(i);
+            }
+            if (empty.length > 0) {
+                let r = empty[Math.floor(Math.random() * empty.length)];
+                board2048[r] = Math.random() < 0.9 ? 2 : 4;
+            }
+        };
+
+        window.render2048 = () => {
+            const container = document.getElementById('game2048Container');
+            if (!container) return;
+            document.getElementById('score2048Text').innerText = score2048;
+            
+            container.innerHTML = board2048.map(val => {
+                let bg = "bg-slate-800";
+                let text = "text-transparent";
+                let shadow = "";
+                if (val > 0) {
+                    text = "text-slate-900 font-extrabold text-xl";
+                    if (val === 2) bg = "bg-slate-200";
+                    else if (val === 4) bg = "bg-amber-100";
+                    else if (val === 8) bg = "bg-amber-400";
+                    else if (val === 16) { bg = "bg-orange-500"; text = "text-white font-extrabold text-xl"; }
+                    else if (val === 32) { bg = "bg-rose-500"; text = "text-white font-extrabold text-xl"; }
+                    else if (val === 64) { bg = "bg-red-600"; text = "text-white font-extrabold text-xl"; }
+                    else { bg = "bg-yellow-400"; text = "text-yellow-950 font-extrabold text-xl"; shadow = "shadow-[0_0_15px_rgba(250,204,21,0.6)]"; }
+                }
+                return `<div class="rounded-xl flex items-center justify-center ${bg} ${text} ${shadow} transition-all">${val > 0 ? val : ''}</div>`;
+            }).join('');
+        };
+
+        window.move2048 = (dir) => {
+            let moved = false;
+            let slideRow = (row) => {
+                let arr = row.filter(v => v > 0);
+                for (let i = 0; i < arr.length - 1; i++) {
+                    if (arr[i] === arr[i + 1]) {
+                        arr[i] *= 2;
+                        score2048 += arr[i];
+                        arr.splice(i + 1, 1);
+                        moved = true; 
+                    }
+                }
+                while (arr.length < 4) arr.push(0);
+                if (arr.join(',') !== row.join(',')) moved = true;
+                return arr;
+            };
+
+            let newBoard = [...board2048];
+            if (dir === 'left' || dir === 'right') {
+                for (let i = 0; i < 4; i++) {
+                    let row = [newBoard[i * 4], newBoard[i * 4 + 1], newBoard[i * 4 + 2], newBoard[i * 4 + 3]];
+                    if (dir === 'right') row.reverse();
+                    let res = slideRow(row);
+                    if (dir === 'right') res.reverse();
+                    newBoard[i * 4] = res[0]; newBoard[i * 4 + 1] = res[1]; newBoard[i * 4 + 2] = res[2]; newBoard[i * 4 + 3] = res[3];
+                }
+            } else if (dir === 'up' || dir === 'down') {
+                for (let i = 0; i < 4; i++) {
+                    let col = [newBoard[i], newBoard[i + 4], newBoard[i + 8], newBoard[i + 12]];
+                    if (dir === 'down') col.reverse();
+                    let res = slideRow(col);
+                    if (dir === 'down') res.reverse();
+                    newBoard[i] = res[0]; newBoard[i + 4] = res[1]; newBoard[i + 8] = res[2]; newBoard[i + 12] = res[3];
+                }
+            }
+
+            if (moved) {
+                board2048 = newBoard;
+                window.addRandomTile2048();
+                window.render2048();
+            }
+        };
+
+        window.reset2048 = () => {
+            window.init2048();
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                const gameSection = document.getElementById('gamificationSection');
+                if (gameSection) {
+                    const rect = gameSection.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        e.preventDefault(); 
+                        let dirMap = { 'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right' };
+                        window.move2048(dirMap[e.key]);
+                    }
+                }
+            }
+        });
+
+        window.openProfileModal = () => document.getElementById('profileModal').classList.remove('hidden');
+        window.closeProfileModal = () => document.getElementById('profileModal').classList.add('hidden');
+
+        window.handleAvatarFileUpload = (event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) {
+                return window.showToast("Vui lòng chọn ảnh có dung lượng dưới 2MB.", "error");
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64Img = e.target.result;
+                document.getElementById('profileAvatarPreview').src = base64Img;
+                document.getElementById('profileAvatar').value = base64Img;
+                window.showToast("Đã tải ảnh đại diện lên! Hãy bấm Lưu hồ sơ.", "info");
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.pickPresetAvatar = (seed) => {
+            const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+            document.getElementById('profileAvatarPreview').src = url;
+            document.getElementById('profileAvatar').value = url;
+        };
+
+        // --- THEME SWITCH LOGIC ---
+        const SUN_SVG = `<circle cx="8" cy="8" r="3" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1.5v1.4M8 13.1v1.4M1.5 8h1.4M13.1 8h1.4M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></g>`;
+        const MOON_SVG = `<path d="M13.5 9.8A5.6 5.6 0 0 1 6.2 2.5a5.6 5.6 0 1 0 7.3 7.3z" fill="currentColor"/>`;
+
+        window.toggleDarkMode = (isDark) => {
+            const themeIcon = document.getElementById('themeIcon');
+            if (isDark) {
+                document.documentElement.classList.add('dark-mode');
+                if (themeIcon) themeIcon.innerHTML = MOON_SVG;
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                if (themeIcon) themeIcon.innerHTML = SUN_SVG;
+            }
+            localStorage.setItem('omniDarkMode', isDark);
+            
+            const profileCheckbox = document.getElementById('profileDarkMode');
+            if (profileCheckbox) profileCheckbox.checked = isDark;
+        };
+        
+        window.toggleThemeMode = () => {
+            const isCurrentlyDark = document.documentElement.classList.contains('dark-mode');
+            window.toggleDarkMode(!isCurrentlyDark);
+        };
+
+        window.loadLocalProfile = () => {
+            const key = window.currentUserUid ? 'omniProfile_' + window.currentUserUid : 'omniProfile_guest';
+            const data = JSON.parse(localStorage.getItem(key) || '{}');
+            document.getElementById('profileName').value = data.name || '';
+            document.getElementById('profileNickname').value = data.nickname || '';
+            document.getElementById('profileEmail').value = data.email || '';
+            document.getElementById('profileDob').value = data.dob || '';
+            document.getElementById('profilePhone').value = data.phone || '';
+            document.getElementById('profileProvince').value = data.province || 'TP. Hồ Chí Minh';
+            document.getElementById('profileSchool').value = data.school || 'THPT Giồng Ông Tố';
+            document.getElementById('profileGrade').value = data.grade || '';
+            document.getElementById('profileAvatar').value = data.avatar || '';
+            
+            const avatarSrc = data.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Heptagon';
+            document.getElementById('profileAvatarPreview').src = avatarSrc;
+            document.getElementById('headerAvatar').src = avatarSrc;
+            document.getElementById('headerUserName').innerText = data.nickname || data.name || 'Hồ sơ';
+        };
+
+        window.saveProfile = async () => {
+            const data = {
+                name: document.getElementById('profileName').value.trim(),
+                nickname: document.getElementById('profileNickname').value.trim(),
+                email: document.getElementById('profileEmail').value.trim(),
+                dob: document.getElementById('profileDob').value,
+                phone: document.getElementById('profilePhone').value.trim(),
+                province: document.getElementById('profileProvince').value,
+                school: document.getElementById('profileSchool').value.trim(),
+                grade: document.getElementById('profileGrade').value,
+                avatar: document.getElementById('profileAvatar').value.trim(),
+                darkMode: document.getElementById('profileDarkMode').checked
+            };
+
+            if (!data.email || !data.phone || !data.school) {
+                return window.showToast("Vui lòng điền các mục bắt buộc (*): Email, Số điện thoại và Trường THPT.", "error");
+            }
+
+            const storageKey = window.currentUserUid ? 'omniProfile_' + window.currentUserUid : 'omniProfile_guest';
+            localStorage.setItem(storageKey, JSON.stringify(data));
+            window.loadLocalProfile();
+            window.closeProfileModal();
+            window.showToast("Đã lưu thông tin hồ sơ & ảnh đại diện!", "success");
+
+            if (window.syncCloudProfile) window.syncCloudProfile(data);
+        };
+
+        window.openAuthModal = () => document.getElementById('authModal').classList.remove('hidden');
+        window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
+
+        window.toggleAuthMode = () => {
+            window.isRegisterMode = !window.isRegisterMode;
+            document.getElementById('nameField').classList.toggle('hidden', !window.isRegisterMode);
+            document.getElementById('authSubmitBtn').innerText = window.isRegisterMode ? 'Đăng ký tài khoản' : 'Đăng nhập';
+            document.getElementById('authSwitchText').innerText = window.isRegisterMode ? 'Đã có tài khoản?' : 'Học viên mới?';
+            document.getElementById('authSwitchBtn').innerText = window.isRegisterMode ? 'Đăng nhập ngay' : 'Tạo tài khoản';
+        };
+
+        window.switchAuthTab = (tab) => {
+            if (tab === 'email') {
+                document.getElementById('tab-auth-email').className = "flex-1 border-r-2 border-ink py-3 text-sm font-bold bg-white text-slate-900";
+                document.getElementById('tab-auth-sms').className = "flex-1 py-3 text-sm font-bold text-slate-500 bg-slate-100";
+                document.getElementById('auth-email-section').classList.remove('hidden');
+                document.getElementById('auth-sms-section').classList.add('hidden');
+            } else {
+                document.getElementById('tab-auth-sms').className = "flex-1 py-3 text-sm font-bold bg-white text-slate-900 border-l-2 border-ink -ml-[2px]";
+                document.getElementById('tab-auth-email').className = "flex-1 border-r-2 border-ink py-3 text-sm font-bold text-slate-500 bg-slate-100";
+                document.getElementById('auth-sms-section').classList.remove('hidden');
+                document.getElementById('auth-email-section').classList.add('hidden');
+                if (window.initCloudRecaptcha) window.initCloudRecaptcha();
+            }
+        };
+
+        window.loadSampleText = () => {
+            document.getElementById('subjectSelect').value = "Tiếng Anh";
+            document.getElementById('docInput').value = `Unit 9: Green Living (Sống Xanh)\n1. Sustainable (adj) /səˈsteɪ.nə.bəl/: Bền vững – Sustainable energy is the future.\n2. Carbon footprint (n) /ˌkɑː.bən ˈfʊt.prɪnt/: Dấu chân carbon – Cycling reduces your carbon footprint.\n3. Renewable (adj) /rɪˈnjuː.ə.bəl/: Có thể tái tạo – Solar power is renewable.\n4. Decompose (v) /ˌdiː.kəmˈpəʊz/: Phân hủy – Plastic bags take years to decompose.`;
+            studyData = JSON.parse(JSON.stringify(BUILTIN_SAMPLE_DATA));
+            currentCardIndex = 0;
+            window.renderMindmap();
+            window.renderFlashcard();
+            window.renderQuizzes();
+            window.switchTab('mindmap');
+            window.recordStudyActivity("Hoàn thành nạp và phân tích bài học", 5);
+        };
+
+        window.updateGoal = () => document.getElementById('goalTarget').innerText = document.getElementById('goalInput').value;
+        
+        window.handleFileUpload = (e) => {
+            const f = e.target.files[0];
+            if (f) {
+                document.getElementById('fileNameDisplay').innerText = `Đã tải: ${f.name}`;
+                const r = new FileReader();
+                r.onload = (ev) => {
+                    document.getElementById('docInput').value = ev.target.result;
+                    window.recordStudyActivity(`Tải tệp học liệu "${f.name}"`, 4);
+                };
+                r.readAsText(f);
+            }
+        };
+
+        window.flipCard = () => document.getElementById('flashcardBox').classList.toggle('flipped');
+        window.nextCard = () => { if (studyData?.flashcards?.length) { currentCardIndex = (currentCardIndex + 1) % studyData.flashcards.length; window.renderFlashcard(); }};
+        window.prevCard = () => { if (studyData?.flashcards?.length) { currentCardIndex = (currentCardIndex - 1 + studyData.flashcards.length) % studyData.flashcards.length; window.renderFlashcard(); }};
+        window.speakWord = (e) => {
+            e.stopPropagation();
+            if (studyData?.flashcards?.length) {
+                const u = new SpeechSynthesisUtterance(studyData.flashcards[currentCardIndex].front);
+                u.lang = 'en-US';
+                window.speechSynthesis.speak(u);
+            }
+        };
+
+        window.analyzeDocument = async () => {
+            const text = document.getElementById('docInput').value.trim();
+            if (text.length < 10) return window.showToast('Vui lòng dán nội dung bài học hoặc bấm "Nạp bài mẫu chạy ngay".', 'error');
+
+            const btn = document.getElementById('analyzeBtn');
+            const status = document.getElementById('statusMsg');
+            btn.disabled = true;
+            status.classList.remove('hidden');
+
+            const selectedModel = document.getElementById('modelSelect').value;
+            const prompt = `Bạn là giáo viên THPT. Phân tích văn bản sau và trả về JSON thuần túy theo cấu trúc:
+{"mindmap":[{"title":"Nhánh 1","points":["Ý 1","Ý 2"]}],"flashcards":[{"front":"Thuật ngữ","pos":"Từ loại","pronunciation":"Phiên âm","back":"Định nghĩa","example":"Ví dụ","syn_ant":"Đồng/Trái nghĩa"}],"quizzes":[{"question":"Câu hỏi?","options":["Đáp án A","Đáp án B","Đáp án C","Đáp án D"],"answer":0,"explanation":"Giải thích"}]}
+Văn bản: """${text}"""`;
+
+            try {
+                const res = await fetch(`/api/gemini`, {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt, model: selectedModel })
+                });
+                
+                const data = await res.json();
+                if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    studyData = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json|```/g, '').trim());
+                    window.showToast("Phân tích AI thành công!", "success");
+                } else {
+                    throw new Error("Không nhận được dữ liệu");
+                }
+            } catch (err) {
+                console.error("Lỗi gọi AI:", err);
+                studyData = JSON.parse(JSON.stringify(BUILTIN_SAMPLE_DATA));
+                window.showToast("Lỗi máy chủ! Tạm thời hiển thị bài học mẫu.", "error");
+            }
+
+            btn.disabled = false;
+            status.classList.add('hidden');
+            
+            currentCardIndex = 0;
+            window.renderMindmap();
+            window.renderFlashcard();
+            window.renderQuizzes();
+            window.switchTab('mindmap');
+            window.recordStudyActivity("Phân tích tài liệu bằng AI", 5);
+        };
+
+        window.renderMindmap = () => {
+            if (!studyData?.mindmap) return;
+            document.getElementById('mindmapContainer').innerHTML = studyData.mindmap.map((b, i) => `
+                <div class="rounded-2xl border-2 border-ink bg-white p-5 shadow-pop">
+                    <span class="inline-block rounded-lg border-2 border-ink px-3 py-1 text-sm font-extrabold ${BRANCH_COLORS[i % 4]}">${b.title}</span>
+                    <ul class="mt-3 space-y-1.5 text-sm font-medium text-slate-700">
+                        ${(b.points || []).map(p => `<li class="flex gap-2"><span class="text-indigo-600">●</span><span>${p}</span></li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        };
+
+        window.renderFlashcard = () => {
+            if (!studyData?.flashcards?.length) return;
+            const c = studyData.flashcards[currentCardIndex];
+            document.getElementById('flashcardBox').classList.remove('flipped');
+            document.getElementById('cardCounter').innerText = `${currentCardIndex + 1} / ${studyData.flashcards.length}`;
+            document.getElementById('fcPos').innerText = c.pos || 'Thuật ngữ';
+            document.getElementById('fcFront').innerText = c.front || '';
+            document.getElementById('fcPronun').innerText = c.pronunciation || '';
+            document.getElementById('fcBack').innerText = c.back || '';
+            document.getElementById('fcExample').innerText = c.example ? `"${c.example}"` : '';
+            document.getElementById('fcSynAnt').innerText = c.syn_ant || '';
+        };
+
+        window.renderQuizzes = () => {
+            if (!studyData?.quizzes?.length) return;
+            document.getElementById('quizContainer').innerHTML = studyData.quizzes.map((q, i) => `
+                <div class="rounded-2xl border-2 border-ink bg-white p-5 shadow-pop">
+                    <p class="font-bold font-display text-base sm:text-lg"><span class="text-indigo-600 mr-2">Câu ${i+1}.</span>${q.question}</p>
+                    <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                        ${q.options.map((o, j) => `
+                            <button onclick="window.checkAnswer(${i}, ${j}, this)" class="quiz-btn-${i} rounded-xl border-2 border-ink px-4 py-2.5 text-left text-sm font-bold bg-slate-50 hover:bg-indigo-50 pop-press text-slate-900">
+                                ${String.fromCharCode(65+j)}. ${o}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <p id="explain-${i}" class="hidden mt-3 rounded-xl bg-amber-100 border-2 border-ink p-3 text-sm font-bold text-amber-950 shadow-pop">💡 ${q.explanation}</p>
+                </div>
+            `).join('');
+        };
+
+        window.checkAnswer = (qIndex, selected, btn) => {
+            const q = studyData.quizzes[qIndex];
+            const btns = document.querySelectorAll(`.quiz-btn-${qIndex}`);
+            btns.forEach(b => b.disabled = true);
+            if (selected === q.answer) {
+                btn.className = "rounded-xl border-2 border-ink px-4 py-2.5 text-left text-sm font-bold bg-emerald-400 text-slate-900 shadow-pop";
+                document.getElementById('progressCount').innerText = ++completedQuizzes;
+                window.recordStudyActivity("Trả lời đúng câu hỏi trắc nghiệm", 2);
+            } else {
+                btn.className = "rounded-xl border-2 border-ink px-4 py-2.5 text-left text-sm font-bold bg-rose-400 text-slate-900 shadow-pop";
+                if (btns[q.answer]) btns[q.answer].className = "rounded-xl border-2 border-ink px-4 py-2.5 text-left text-sm font-bold bg-emerald-400 text-slate-900 shadow-pop";
+                window.recordStudyActivity("Hoàn thành câu hỏi luyện tập", 1);
+            }
+            document.getElementById(`explain-${qIndex}`).classList.remove('hidden');
+        };
+
+        window.saveCurrentCard = async () => {
+            if (!studyData?.flashcards?.length) return;
+            const card = studyData.flashcards[currentCardIndex];
+            if (savedItems.some(item => item.front === card.front)) {
+                return window.showToast(`Thẻ "${card.front}" đã có trong Sổ tay!`, 'info');
+            }
+            const newItem = { id: 'local_' + Date.now(), ...card };
+            savedItems.unshift(newItem);
+            localStorage.setItem('omniLocalSaved', JSON.stringify(savedItems));
+            window.renderSavedItems();
+            window.showToast(`Đã lưu "${card.front}" vào Sổ tay 🔖`, 'success');
+            if (window.addCloudNotebookItem) window.addCloudNotebookItem(card, newItem);
+        };
+
+        window.renderSavedItems = () => {
+            const container = document.getElementById('savedList');
+            const countEl = document.getElementById('savedCount');
+            if (countEl) countEl.innerText = savedItems.length;
+            if (!container) return;
+            if (!savedItems.length) {
+                container.innerHTML = `<p class="col-span-2 rounded-2xl border-2 border-dashed border-ink/30 p-8 text-center text-slate-500 font-bold">Sổ tay trống. Hãy bấm "Lưu thẻ này" ở mục Thẻ nhớ nhé.</p>`;
+                return;
+            }
+            container.innerHTML = savedItems.map(c => `
+                <div class="group relative rounded-2xl border-2 border-ink bg-white p-4 shadow-pop">
+                    <p class="font-display text-lg font-extrabold text-indigo-600">${c.front}</p>
+                    <p class="text-xs font-mono text-slate-400">${c.pronunciation || ''}</p>
+                    <p class="text-sm text-slate-700 font-bold mt-1">👉 ${c.back}</p>
+                    <button onclick="window.removeSaved('${c.id}')" class="absolute top-3 right-3 text-xs font-bold text-rose-900 border-2 border-ink bg-rose-300 px-2.5 py-1 rounded-lg shadow-pop pop-press">Xóa</button>
+                </div>
+            `).join('');
+        };
+
+        window.removeSaved = async (id) => {
+            savedItems = savedItems.filter(item => item.id !== id);
+            localStorage.setItem('omniLocalSaved', JSON.stringify(savedItems));
+            window.renderSavedItems();
+            window.showToast("Đã xóa thẻ khỏi Sổ tay", "info");
+            if (window.deleteCloudNotebookItem) window.deleteCloudNotebookItem(id);
+        };
+
+        const LEGAL_DOCS = {
+            terms: {
+                title: "Điều khoản sử dụng",
+                body: `<p><strong>1. Chủ quản nền tảng:</strong> Dự án OmniStudy AI do nhóm <strong>The Heptagon – Trường THPT Giồng Ông Tố</strong> phát triển và vận hành.</p>`
+            },
+            privacy: {
+                title: "Chính sách bảo mật thông tin",
+                body: `<p><strong>1. Phạm vi thu thập:</strong> Hệ thống chỉ ghi nhận thông tin hồ sơ học sinh nhằm đồng bộ hóa trải nghiệm học tập.</p>`
+            },
+            conditions: {
+                title: "Điều kiện & Hạn chế cung cấp dịch vụ",
+                body: `<p><strong>1. Đối tượng & Thiết bị:</strong> Phục vụ học sinh THPT trên trình duyệt web có kết nối Internet.</p>`
+            }
+        };
+
+        window.openLegalModal = (type) => {
+            const docData = LEGAL_DOCS[type];
+            if (!docData) return;
+            document.getElementById('legalModalTitle').innerText = docData.title;
+            document.getElementById('legalModalBody').innerHTML = docData.body;
+            document.getElementById('legalModal').classList.remove('hidden');
+        };
+        window.closeLegalModal = () => document.getElementById('legalModal').classList.add('hidden');
+
+        function initImmediateApp() {
+            const isDark = localStorage.getItem('omniDarkMode') === 'true';
+            document.getElementById('profileDarkMode').checked = isDark;
+            window.toggleDarkMode(isDark);
+
+            window.loadLocalProfile();
+            window.renderSavedItems();
+            
+            window.init2048();
+            initWaveTitle();
+            initMagnifyDock();
+            
+            checkStreakOnVisit();
+            updateScrollAnimations();
+        }
+        initImmediateApp();
+    </script>
+
+    <!-- ENGINE SỐ 2: FIREBASE CLOUD -->
+    <script type="module">
+        try {
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js");
+            const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js");
+            const { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyAfVCAh6FqWJrBjP0_j5jV_EAGXBNuWcak",
+                authDomain: "omnistudy-ai-782d1.firebaseapp.com",
+                projectId: "omnistudy-ai-782d1",
+                storageBucket: "omnistudy-ai-782d1.firebasestorage.app",
+                messagingSenderId: "202746052512",
+                appId: "1:202746052512:web:ad1c74bfb8ff3a47846ec5"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            let confirmationResult = null;
+
+            onAuthStateChanged(auth, async (user) => {
+                const btn = document.getElementById('authBtn');
+                const signOutBtn = document.getElementById('signOutProfileBtn');
+                if (user) {
+                    window.currentUserUid = user.uid;
+                    btn.innerHTML = '☁️ Đã đồng bộ Cloud';
+                    btn.className = "rounded-full border-2 border-ink bg-emerald-400 px-3.5 py-1.5 text-xs sm:text-sm font-bold text-slate-900 pop-press shadow-pop";
+                    btn.setAttribute("onclick", "window.openProfileModal()");
+                    if (signOutBtn) signOutBtn.classList.remove('hidden');
+
+                    try {
+                        const snap = await getDoc(doc(db, "users", user.uid));
+                        if (snap.exists()) {
+                            const cloudData = snap.data();
+                            localStorage.setItem('omniProfile_' + user.uid, JSON.stringify(cloudData));
+                            if (cloudData.streakState) localStorage.setItem('omniStreakStateV2', JSON.stringify(cloudData.streakState));
+                            if (cloudData.weeklyMinutes) localStorage.setItem('omniWeeklyMinsV2', JSON.stringify(cloudData.weeklyMinutes));
+                            if (window.renderWeeklyStats) window.renderWeeklyStats();
+                        }
+
+                        const notebookSnap = await getDocs(collection(db, "users", user.uid, "notebook"));
+                        if (!notebookSnap.empty) {
+                            const cloudSaved = [];
+                            notebookSnap.forEach(docItem => {
+                                cloudSaved.push({ id: docItem.id, ...docItem.data() });
+                            });
+                            localStorage.setItem('omniLocalSaved', JSON.stringify(cloudSaved));
+                            if (window.renderSavedItems) window.renderSavedItems();
+                        }
+                    } catch (e) {}
+                    window.loadLocalProfile();
+                } else {
+                    window.currentUserUid = null;
+                    btn.innerHTML = 'Đăng nhập Cloud';
+                    btn.className = "rounded-full border-2 border-ink bg-amber-400 px-4 py-1.5 text-xs sm:text-sm font-bold text-amber-950 pop-press shadow-pop";
+                    btn.setAttribute("onclick", "window.openAuthModal()");
+                    if (signOutBtn) signOutBtn.classList.add('hidden');
+                    window.loadLocalProfile();
+                }
+            });
+
+            window.signOutApp = () => signOut(auth).then(() => { window.closeProfileModal(); window.showToast("Đã đăng xuất tài khoản", "info"); });
+
+            window.handleAuthSubmit = async () => {
+                const email = document.getElementById('authEmail').value.trim();
+                const pass = document.getElementById('authPass').value.trim();
+                const btn = document.getElementById('authSubmitBtn');
+                if (!email || !pass) return window.showToast('Vui lòng nhập đủ Email và Mật khẩu.', 'error');
+                
+                btn.disabled = true; btn.innerText = "⏳ Đang kết nối...";
+                try {
+                    if (window.isRegisterMode) {
+                        await createUserWithEmailAndPassword(auth, email, pass);
+                        window.showToast("Đăng ký thành công!", "success");
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, pass);
+                        window.showToast("Đăng nhập thành công!", "success");
+                    }
+                    window.closeAuthModal();
+                } catch (e) {
+                    if (e.code === 'auth/email-already-in-use') {
+                        try {
+                            await signInWithEmailAndPassword(auth, email, pass);
+                            window.showToast("Đã tự động đăng nhập vào tài khoản của bạn!", "success");
+                            window.closeAuthModal();
+                        } catch (err) {
+                            window.showToast("Email này đã được đăng ký, vui lòng nhập đúng mật khẩu.", "info");
+                        }
+                    } else {
+                        window.showToast("Lỗi xác thực: Kiểm tra lại Email hoặc Mật khẩu.", "error");
+                    }
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = window.isRegisterMode ? 'Đăng ký tài khoản' : 'Đăng nhập';
+                }
+            };
+
+            window.initCloudRecaptcha = () => {
+                if (!window.recaptchaVerifier) window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+            };
+
+            window.sendOTP = async () => {
+                const phone = document.getElementById('phoneNumber').value.trim();
+                if (!phone) return window.showToast("Vui lòng nhập số điện thoại.", "error");
+                const phoneNumber = phone.startsWith('0') ? '+84' + phone.slice(1) : '+84' + phone;
+                document.getElementById('sendOtpBtn').innerText = "Đang gửi...";
+                try {
+                    window.initCloudRecaptcha();
+                    confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+                    document.getElementById('phoneInputGroup').classList.add('hidden');
+                    document.getElementById('otpInputGroup').classList.remove('hidden');
+                    window.showToast("Đã gửi mã OTP!", "success");
+                } catch (e) { window.showToast("Lỗi gửi SMS: " + e.message, "error"); }
+                document.getElementById('sendOtpBtn').innerText = "Gửi mã OTP";
+            };
+
+            window.verifyOTP = async () => {
+                try {
+                    await confirmationResult.confirm(document.getElementById('otpCode').value.trim());
+                    window.closeAuthModal();
+                    window.showToast("Đăng nhập SMS thành công!", "success");
+                } catch (e) { window.showToast("Mã OTP không đúng hoặc đã hết hạn.", "error"); }
+            };
+
+            window.syncCloudProfile = async (data) => {
+                if (window.currentUserUid) {
+                    try { await setDoc(doc(db, "users", window.currentUserUid), data, { merge: true }); } catch (e) {}
+                }
+            };
+
+            window.syncCloudStreak = async (streakState, weeklyMinutes) => {
+                if (window.currentUserUid) {
+                    try { await setDoc(doc(db, "users", window.currentUserUid), { streakState, weeklyMinutes }, { merge: true }); } catch (e) {}
+                }
+            };
+
+            window.addCloudNotebookItem = async (card, localItem) => {
+                if (window.currentUserUid) {
+                    try {
+                        const docRef = await addDoc(collection(db, "users", window.currentUserUid, "notebook"), card);
+                        localItem.id = docRef.id;
+                    } catch (e) {}
+                }
+            };
+
+            window.deleteCloudNotebookItem = async (id) => {
+                if (window.currentUserUid && !String(id).startsWith('local_')) {
+                    try { await deleteDoc(doc(db, "users", window.currentUserUid, "notebook", id)); } catch (e) {}
+                }
+            };
+        } catch (err) {
+            console.warn("Chế độ Offline/Local đang hoạt động:", err);
+        }
+    </script>
+</body>
+</html>
